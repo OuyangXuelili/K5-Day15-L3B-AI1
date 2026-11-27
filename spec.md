@@ -89,7 +89,7 @@ Số đo trước khi gọi API (không phải accuracy AI): regex preview đạ
 
 ## §8. Chi phí
 
-Đã chuẩn bị 100 phiên, seed 20261127, ba persona và kịch bản 300/1.000/5.000 người, hai mức giá model. Quy mô/tần suất là tự ước tính. Chưa đo token hoặc cost/phiên/cost-task thành công, chưa có tỷ lệ đạt lượt 2; xem `cost/cost-estimate.md`. Chưa kết luận hiệu quả kinh tế.
+Mô phỏng `simulate-1@20261127-144132`: 100 phiên, 167 lượt hỏi, 0 lỗi, đo trên `openai/gpt-4o-mini` bằng code lượt 2. Chi phí khoảng $0,00022 / phiên; chi phí / task thành công $0,00022 theo tỉ lệ đạt lượt 2 (100%, cận trên) hoặc $0,00028 theo lượt 1 (80%). Kịch bản 300 / 1.000 / 5.000 người: $0,086 / $0,29 / $1,44 mỗi tháng; `gpt-5-mini` chỉ quy đổi giá: $0,16 / $0,53 / $2,63. Khoảng 69% lượt hỏi vẫn cần nhân viên duyệt hoặc tiếp nhận. Quy mô, tần suất và thời gian tiết kiệm là tự ước tính; chi phí model không phải yếu tố quyết định, chưa đo được nhân viên duyệt nhanh hơn bao nhiêu. Chi tiết: `cost/cost-estimate.md`.
 
 ## §9. Rủi ro & an toàn
 
@@ -117,5 +117,6 @@ Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm t
 | 27/11 sau lượt 1 (Tú) | Cải tiến trước lượt 2 (commit `d860de9`): model trả thêm `issues`; code ưu tiên yêu cầu huỷ, hỏi làm rõ khi ≥2 sự cố có bồi thường, chỉ giữ món khách thật sự nhắc (`mentioned_items`), đọc số viết bằng chữ và thêm đơn vị, mở rộng mẫu chặn chỉ dẫn giả, kiểm dấu hiệu khẩn trước khi gọi model và bỏ qua câu phủ định | Nhắm cả 6 câu trượt lượt 1 (D10, D17, D18, D20, D21, D30) và đường an toàn — **một lần cải tiến gộp nhiều nhóm lỗi**, nên lượt 2 không tách được tác dụng của từng thay đổi. Trong lúc sửa đã chạy thử 11 câu benchmark bằng model thật; chi tiết `docs/cai-tien-luot-2.md`, `eval/report.md` |
 | 27/11 sau lượt 1 (Ân) | Đồng bộ trạng thái ở đầu spec, §4 và README: lượt 1 đã chạy, preview dùng chung luật code nên điểm preview tăng sau cải tiến | Sửa mô tả cũ "chưa chạy eval chính thức"; không đổi benchmark, metric, §7 hay kết quả |
 | 27/11 sau cải tiến (Ân) | Chạy lượt 2 chính thức `run-2@20261127-143025`: 30/30, đạt chuẩn §7, 0 hồi quy; so từng câu với lượt 1 (`eval/compare-run-1-2.md`); phân tích phần sửa nhờ model và nhờ code | File khoá giống CP2 (`e807241`), 45 kiểm thử đạt trước khi chạy. 4/6 câu được sửa nhờ luật code; bộ đã nhìn khi sửa nên 30/30 là cận trên (`eval/report.md` mục 6). Không chạy lượt cải tiến thứ ba |
+| 27/11 sau lượt 2 (Ân) | Chạy mô phỏng chi phí `simulate-1@20261127-144132` (100 phiên, 0 lỗi) với tỉ lệ đạt lượt 2; viết lại `cost/cost-estimate.md` | Token đo thật từ trace; giữ nguyên `cost/personas.yaml`. Giả định phút tiết kiệm (1 hay 5 phút) chờ Mạnh chốt |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

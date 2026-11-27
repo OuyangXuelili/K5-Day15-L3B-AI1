@@ -1,50 +1,52 @@
-# Chi phí khi dùng thật — số đo lượt 1 và trạng thái mô phỏng
+# Chi phí khi dùng thật — mô phỏng 100 phiên sau lượt 2
 
-**Trạng thái:** lượt 1 chính thức `run-1@20261127-111429` đã có số đo token thật từ `traces/run-1.jsonl`, chạy bằng `openai/gpt-4o-mini` qua OpenRouter và đạt 24/30 (80%). Đây là số đo của 30 câu eval, không phải mô phỏng 100 phiên. Chưa có lượt 2 nên chưa dùng tỷ lệ này làm tỷ lệ thành công cuối cùng và chưa chạy `cost/simulate-N.csv`.
+**Trạng thái:** đã chạy mô phỏng `simulate-1@20261127-144132`: 100 phiên, 167 lượt hỏi, 0 phiên lỗi, toàn bộ gọi `openai/gpt-4o-mini` qua OpenRouter bằng đúng code của lượt 2. Tỉ lệ đạt dùng để tính lấy từ lượt 2 `run-2@20261127-143025` (30/30). File gốc: `cost/simulate-1.csv`, `cost/simulate-1-summary.md`, `traces/simulate-1.jsonl`. Mọi chi phí ở đây là quy đổi theo bảng giá, không phải hoá đơn đã thanh toán.
 
-## 1. Số đo thật từ lượt 1
+## 1. Số đo token từ mô phỏng
 
-| Chỉ số | Giá trị |
-|---|---:|
-| Số câu | 30 |
-| Token vào | 18.905 |
-| Token ra | 422 |
-| Trung bình token vào/câu | 630 |
-| Trung bình token ra/câu | 14 |
-| Tỷ lệ đạt lượt 1 | 24/30 (80%) |
-| Chi phí quy đổi với gpt-4o-mini | 0,003092 USD / 30 câu |
-| Chi phí quy đổi trung bình | 0,000103 USD / câu |
+| Persona | Số phiên | Lượt hỏi / phiên | Token vào / phiên | Token ra / phiên | Gọi model / phiên | Gọi công cụ / phiên |
+|---|---:|---:|---:|---:|---:|---:|
+| it_khieu_nai | 52 | 1 | 808 | 22 | 1,0 | 3,0 |
+| dung_deu | 29 | 2 | 1.611 | 43 | 2,0 | 5,9 |
+| can_lien_he_nhieu | 19 | 3 | 2.422 | 64 | 3,0 | 8,8 |
 
-Cách tính theo giá `gpt-4o-mini` input/output `0,15/0,60 USD trên 1M token`:
+Tổng 134.746 token vào và 3.597 token ra. Trung bình mỗi lượt hỏi khoảng 807 token vào và 22 token ra, khớp số đo của lượt 2 (810 / 21,6). Độ trễ model trung bình 1,31 giây mỗi lượt hỏi; phiên chậm nhất 5,4 giây (3 lượt). Token lấy từ `usage` trong trace, không ước lượng.
 
-`(18.905 × 0,15 + 422 × 0,60) / 1.000.000 = 0,00309195 USD`.
+## 2. Chi phí
 
-Chi phí trên là chi phí quy đổi theo bảng giá, không phải hóa đơn đã thanh toán. Token lấy từ `usage` trong trace, không ước lượng. Lượt 1 chưa đạt chuẩn §7 vì đạt 24/30 thay vì tối thiểu 26/30, còn 2 lỗi overpay và 1 câu từ chối trượt. Không dùng 5 output hiệu chỉnh để thay số đo mô phỏng.
+| Model (giá $/1M token vào · ra) | Chi phí / phiên | Chi phí / task thành công | Tháng — 300 người | Tháng — 1.000 người | Tháng — 5.000 người |
+|---|---:|---:|---:|---:|---:|
+| `openai/gpt-4o-mini` (0,15 · 0,60), **đo thật** | $0,00022 | $0,00022 | $0,086 | $0,29 | $1,44 |
+| `gpt-5-mini` (0,25 · 2,00), **chỉ quy đổi** | $0,00041 | $0,00041 | $0,16 | $0,53 | $2,63 |
 
-## 2. Cấu hình mô phỏng đã chuẩn bị
+- Chi phí / task thành công = chi phí / phiên ÷ tỉ lệ đạt. Tỉ lệ đạt lượt 2 là 100% nhưng là cận trên, vì bộ thử đã bị nhìn khi cải tiến (`eval/report.md` mục 6.5). **Mức thận trọng** dùng tỉ lệ lượt 1 (80%): $0,00022 ÷ 0,80 ≈ **$0,00028 / task thành công** với `gpt-4o-mini`.
+- Dòng `gpt-5-mini` dùng lại số token đo trên `gpt-4o-mini`. Model suy luận thường sinh nhiều token ra hơn và tách token khác, nên con số thật có thể cao hơn. Dòng này chỉ để so mức giá, không phải số đo.
+- Số phiên mỗi tháng = 1.000 × (0,50×0,2 + 0,35×1 + 0,15×3) = 900 phiên ở kịch bản cơ sở (tự ước tính).
+- Đầu vào mô phỏng lấy ngẫu nhiên từ các câu loại `thuong` và `kho` của bộ thử (27 câu khác nhau). Token là số đo thật, nhưng nội dung không phải lưu lượng khách thật.
 
-`cost/personas.yaml` đã có 100 phiên, seed `20261127`, ba persona, ba kịch bản 300/1.000/5.000 người và các mức giá `gpt-4o-mini`, `openai/gpt-4o-mini`, `gpt-5-mini`. Quy mô người dùng, tỷ lệ persona và tần suất đều là tự ước tính, không suy ra từ 150 review.
+## 3. Phần việc vẫn cần nhân viên
 
-Mô phỏng 100 phiên vẫn **chưa chạy** vì cần bản code/model đã chốt, token trace của chính các phiên mô phỏng và tỷ lệ đạt từ lượt 2 cùng model. Không tạo `cost/simulate-N.csv` hoặc số liệu thay thế khi thiếu các điều kiện này.
+Trong 167 lượt hỏi mô phỏng: 62 chuyển nhân viên (`handoff`), 31 nháp voucher và 23 nháp hoàn tiền chờ duyệt, 36 hỏi thêm thông tin, 15 không bồi thường. Như vậy khoảng **69% lượt hỏi vẫn cần nhân viên duyệt hoặc tiếp nhận**. Trợ lý không thay nhân viên; nó tra đơn, đối chiếu chính sách và soạn sẵn đề xuất để nhân viên duyệt nhanh hơn. Tỉ lệ này phản ánh bộ thử (nhiều câu khó), chưa phải tỉ lệ của khách thật.
 
-## 3. Chi phí/task thành công
+## 4. So với impact
 
-Công thức: `chi phí trung bình/phiên ÷ tỷ lệ đạt thật`.
+Chi phí model ở kịch bản cơ sở là **$0,29 / tháng cho 900 phiên**, tức khoảng $0,0003 mỗi phiên. Thời gian tiết kiệm của nhân viên chưa được đo, và hai tài liệu đang dùng hai giả định khác nhau (cần Mạnh chốt một con số):
 
-Tạm tính theo lượt 1, chỉ để tham khảo trên bộ 30 câu: `0,000103 ÷ 0,80 = 0,000129 USD/task đạt`. Con số này **không phải kết quả cuối**, vì tỷ lệ 80% là lượt 1 và chi phí trung bình đang tính trên câu eval độc lập, không phải 100 phiên mô phỏng theo ba persona.
+| Giả định tiết kiệm / phiên | Thời gian tiết kiệm / tháng (900 phiên) | Ghi ở |
+|---|---:|---|
+| 1 phút | 900 phút ≈ 15 giờ | Bản trước của tài liệu này |
+| 5 phút | 4.500 phút ≈ 75 giờ | `spec.md` §2 |
 
-Tần suất bình quân dự kiến = `0,50×0,2 + 0,35×1 + 0,15×3 = 0,9 phiên/người/tháng` (tự ước tính). Với 1.000 người dùng thử, quy mô tham khảo là 900 phiên/tháng; chưa dùng để kết luận ROI/go vì chưa có cost mô phỏng và chưa đo thời gian xử lý thực tế. Impact hiện chỉ giả định tiết kiệm 1 phút thao tác nhân viên/phiên (tự ước tính), không phải thời gian chờ hay thời gian của khách.
+Repo chưa có giá giờ công nhân viên, nên chưa quy đổi thời gian ra tiền. Điểm hoà vốn với chi phí model rất thấp: chỉ cần thời gian tiết kiệm mỗi phiên có giá trị trên khoảng $0,0003. Vì vậy chi phí model không phải điều quyết định go / no-go. Điều quyết định là đề xuất có đúng không (eval) và nhân viên có thật sự duyệt nhanh hơn không (chưa đo). Chưa tính hosting, lưu trữ và giờ công người duyệt.
 
-## 4. Giá và lệnh tái tạo
+## 5. Giá và lệnh tái tạo
 
 Giá theo bảng chung BTC ngày 25/11/2026: `gpt-4o-mini` input/output `0,15/0,60 USD trên 1M token`; `gpt-5-mini` `0,25/2,00 USD trên 1M token`. [Bảng BTC](https://github.com/VinUni-AI20k/K5-L3-Day15-AI-Product-Hackathon/blob/main/further-reading/model-prices.md), [nguồn giá](https://developers.openai.com/api/docs/pricing). Giá dùng để quy đổi, chưa phải chi phí đã thanh toán.
 
-Khi có lượt 2 và đủ token trace thật:
+Lệnh đã chạy:
 
 ```bash
 python run.py simulate --rate-from eval/run-2.csv
 ```
 
-Lệnh sẽ sinh `cost/simulate-N.csv`, `cost/simulate-N-summary.md` và trace mô phỏng. Khi đó chép số đo thật vào tài liệu này, dùng đúng model đã đo và tính cost/task thành công từ tỷ lệ đạt lượt 2. Không sửa kết quả các lượt đã chạy.
-
-Hosting local không tính phí cloud trong bước này; giờ công người duyệt và chi phí vận hành chưa được đo.
+Chạy lại sẽ sinh lượt `simulate-2`, không ghi đè `simulate-1`.

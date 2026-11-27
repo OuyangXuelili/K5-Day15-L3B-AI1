@@ -6,6 +6,8 @@
 
 - Mẫu: 150 review công khai, 75 mỗi app, mọi mức sao.
 - 18/150 (12,00%) nhắc hỗ trợ/hoàn tiền; trong đó 11/150 (7,33%) được quy tắc gắn ngữ cảnh đồ ăn.
+- Bộ đếm từ khóa đánh dấu 2/150 dòng `missing_wrong`; rà nguồn cho thấy một dòng nói không nhận được đơn, dòng còn lại nói về yêu cầu trả thêm phí/không giao hoặc tự hủy. Không dòng nào mô tả thiếu hoặc giao sai món (**0/150 trong lần rà có mục tiêu**); không dùng nhãn máy này làm bằng chứng cho pain thiếu/sai món.
+- Bộ đếm `delay` cho 39/150; regex đã bỏ sót ví dụ “Giao hàng thì lâu” và “lúc nào cũng ghép”. 39 là số máy đếm theo quy tắc hiện tại, chưa phải số đầy đủ sau gắn nhãn tay.
 - Nguồn, sáu trích dẫn và cách đếm: [data-mining.md](data-mining.md); số máy đọc: [counts.json](counts.json).
 - Mẫu và nhãn từng dòng: [reviews-labeled.csv](reviews-labeled.csv). Không có người trong nhóm, người phỏng vấn giả hoặc lời AI đóng vai khách.
 
@@ -15,4 +17,4 @@
 
 **Hướng bị loại:** dự báo/điều phối giao hàng cần dữ liệu vị trí và khả năng can thiệp vận hành; tối ưu phí/khuyến mãi cần bảng giá động. Bản thử khiếu nại có phạm vi và điều kiện chấm rõ hơn trong thời gian hackathon.
 
-**Nguồn đối chiếu:** hai tập review hai app; chưa có nguồn phỏng vấn/khảo sát độc lập. Cần thành viên rà lại nhãn và trao đổi người dùng nếu muốn tăng độ chắc của insight.
+**Nguồn đối chiếu:** hai tập review hai app được lấy bằng cùng phương pháp; chưa có nguồn phỏng vấn/khảo sát độc lập. Việc kiểm hai dòng `missing_wrong` là rà soát có mục tiêu, không thay thế gắn nhãn tay độc lập toàn bộ mẫu.

@@ -1,0 +1,18 @@
+# Phần việc của Mạnh — tình trạng lúc 15:00 ngày 27/11
+
+Mạnh ơi, chiều nay bạn bận nên mình đã làm trước một số phần thuộc mảng của bạn để kịp CP2. Bảng dưới ghi rõ phần nào đã làm, ai làm, và phần nào bạn còn cần làm. Bạn đứng tên các phần này nên nhờ bạn đọc lại để nắm và giải thích được khi bị hỏi lúc demo.
+
+| # | Việc theo phân công | Đã làm | Còn thiếu (Mạnh) | Hạn |
+|---|---|---|---|---|
+| 1 | Chạy `count.py`, đối chiếu trích dẫn với `reviews.csv` | Ân và một reviewer độc lập chạy lại `count.py`: số khớp (delay 39/150, cancel 17/150, support 16/150, missing_wrong 2/150). Đã đối chiếu 11 trích đoạn dùng trong bộ câu thử với `reviews-labeled.csv`. Phát hiện hai điểm: **(a)** 2 review mang nhãn `missing_wrong` thật ra đều nói *không nhận được đơn*, nên số review nói thiếu/sai món là **0/150**; **(b)** regex bỏ sót nhãn giao chậm, ví dụ dòng 3–4 ("Giao hàng thì lâu", "lúc nào cũng ghép") không được gắn `delay` | Sửa `evidence/data-mining.md` và `evidence/summary.md` theo (a) và (b). Đối chiếu chính thức 6 trích dẫn trong `data-mining.md` với `reviews.csv`. Nếu kịp: gắn nhãn tay 150 dòng để đo mức regex bỏ sót | CP3, 10:00 28/11 |
+| 2 | Rà bảng impact ba hướng (`spec.md` §2) | Chưa ai sửa. Đã chỉ ra 3 điểm cần sửa | **(i)** Con số 1.000 người là người dùng của ai, có nguồn công khai không; nếu không có thì ghi rõ *(tự ước tính)* và giải thích. **(ii)** Mọi thừa số đang là tự ước tính, nên tìm ít nhất một số có nguồn. **(iii)** Mọi ca đều chờ nhân viên duyệt, nên "5 phút tiết kiệm/phiên" là của nhân viên CSKH, không phải của khách; nên tách thời gian của khách, của nhân viên và thời gian chờ | CP3, 10:00 28/11 |
+| 3 | Rà data card | Ân đã cập nhật phần bộ câu thử v2 trong `data/DATA_CARD.md` | Rà lại phần review và đơn hàng (seed 20261127, cờ `synthetic`) — mình thấy vẫn đúng | CP3 |
+| 4 | Chấm độc lập 5 output cùng Ân | **Xong.** Do hai thành viên khác chấm, khớp 5/5, ghi ở `eval/README.md` mục 3 | Không cần làm thêm | — |
+| 5 | Mô phỏng chi phí 100 phiên, 3 kịch bản, 2 mức giá | Chưa chạy (phải chờ lượt 2 đã chấm). Đã có số đo sơ bộ: mỗi lần gọi model khoảng **600–650 token vào, 13 token ra** (từ `eval --try` và 5 output hiệu chỉnh) | Chạy `python run.py simulate --rate-from eval/run-2.csv` sau khi có lượt 2. **Lưu ý:** gọi qua OpenRouter thì model trả về tên `openai/gpt-4o-mini`, còn `cost/personas.yaml` đang khai giá với tên `gpt-4o-mini`, nên phải thêm dòng giá đúng tên đó (giá theo bảng BTC). Viết `cost/cost-estimate.md`, so chi phí với impact ở §2 | CP4, 14:30 28/11 |
+| 6 | Nguồn bằng chứng thứ hai | **Chưa có.** Hai tập review của hai app dùng cùng một phương pháp nên chưa tính là nguồn độc lập | Phỏng vấn **≥3 người** (10–15 phút/người, hỏi lần gần nhất đơn đồ ăn gặp sự cố) **hoặc** khảo sát **≥20 người**. Phải là người thật ngoài nhóm. Thiếu thì mất 3 điểm R1. Mình có thể soạn sẵn kịch bản phỏng vấn | Càng sớm càng tốt, chậm nhất CP3 |
+| 7 | `count.py` ghi CSV bằng CRLF làm git báo file đổi | **Xong.** Ân sửa 1 dòng (thêm `lineterminator="\n"`). Chạy lại thì `reviews-labeled.csv` trùng bản trong git, `counts.json` không đổi | Không cần làm thêm | — |
+| 8 | `reflection/nguyen-huu-manh.md` | — | Tự viết từ việc thực tế bạn đã làm và một câu thử trượt của nhóm | 23:59 28/11 |
+
+**Ưu tiên nếu bạn có thời gian tối nay:** mục 6 (thêm 3 điểm R1), rồi mục 1 và 2 (đều nằm trong phần chấm R1/R2). Mục 5 để sáng mai, sau khi có lượt 2.
+
+**Không được sửa sau CP2 (19:30 tối nay):** bộ câu thử, đáp án, metric, chuẩn "đạt", `data/policies.json` và các đơn trong `data/orders.json` mà câu thử dùng. Phần `evidence/` và chi phí thì vẫn được bổ sung bình thường.

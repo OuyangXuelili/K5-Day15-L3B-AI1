@@ -16,7 +16,7 @@ Nhãn tự động là **nhắc từ khóa**, không phải xác nhận người
 |---|---|
 | support | hỗ trợ, khiếu nại, tổng đài, CSKH, chăm sóc khách, giải quyết, xử lý, phản hồi |
 | refund | hoàn tiền, hoàn lại tiền, bồi thường, trả lại tiền |
-| delay | cụm giao chậm/trễ, đợi, chờ lâu, ghép đơn, số giờ chờ |
+| delay | cụm giao chậm/trễ, đợi, chờ lâu, ghép đơn, số giờ chờ; regex hiện bỏ sót một số cách nói tự nhiên |
 | cancel | hủy/huỷ sau chuẩn hóa dấu |
 | missing_wrong | thiếu/sai/nhầm món hoặc không nhận đơn/không giao hàng |
 | fees_promotions | phí, giá, voucher, mã giảm, khuyến mãi, hội viên |
@@ -34,7 +34,13 @@ Ngữ cảnh Grab được suy từ từ khóa: đồ ăn, gọi xe, cả hai, h
 
 Mẫu số chính luôn là toàn bộ review giữ lại, không chỉ những review phàn nàn. Các nhãn có thể chồng lặp, không cộng các hàng thành tổng người. Mẫu có 104 review 1 sao, 39 review 5 sao, 2 review 2 sao và 5 review 3 sao. Giả thuyết tìm ≥5 tín hiệu ngữ cảnh đồ ăn đạt ở mức sàng lọc (11/150), không chứng minh tác động của giải pháp.
 
+**Rà lại nhãn sau lần đếm:** `missing_wrong` là 2/150 lần khớp từ khóa. Đối chiếu hai dòng cho thấy một dòng nói không nhận được đơn (`grab:14831270605`), còn một dòng nói về yêu cầu trả thêm phí/không giao hoặc tự hủy (`shopeefood:14827912775`), không mô tả thiếu hoặc giao sai món. Rà lại các excerpt theo nhóm từ khóa thiếu/sai/nhầm món không thấy review nào mô tả thiếu hoặc giao sai món: **0/150 review có tín hiệu thiếu/sai món trong lần rà mục tiêu**. Đây là rà soát có mục tiêu theo từ khóa, chưa phải gắn nhãn tay độc lập toàn bộ 150 dòng; không dùng 2/150 làm bằng chứng cho pain thiếu/sai món.
+
+Regex `delay` bỏ sót ít nhất hai ví dụ trong mẫu ShopeeFood: `14832318194` (“Giao hàng thì lâu…”) và `14832175871` (“Giao đơn lúc nào cũng ghép…”). Do đó 39/150 là số máy đếm theo từ khóa hiện tại, không phải số đầy đủ mọi review có ý giao chậm/chờ/ghép. Chưa tính lại một tỷ lệ thủ công cho toàn bộ mẫu; không cộng tùy ý các dòng bỏ sót vào số 39.
+
 ## 4. Sáu ví dụ nguyên văn
+
+Đã đối chiếu ID và đoạn trích của cả sáu ví dụ dưới đây với `reviews.csv`; các câu là nội dung trong mẫu, không phải lời đã xác minh độc lập.
 
 - `shopeefood:14824487759` (2026-11-23T05:12:31-07:00): “Nên để thẳng số của quán cần gì thì gọi thẳng luôn, cứ nhắn với con tép r đợi nch với nv hỗ trợ tốn hết cả thgian ai rảnh đâu mà canh. Mỗi lần cần xử lý là ngồi đợi ngồi canh tốn thgian vch ra” — [nguồn](https://itunes.apple.com/vn/rss/customerreviews/page=1/id=1137866760/sortby=mostrecent/json).
 - `shopeefood:14815432527` (2026-11-20T22:50:01-07:00): “Bắt khách hàng đợi quá lâu và xảy ra quá nhiều lần. Không có chính sách chăm sóc khách hàng rõ ràng” — [nguồn](https://itunes.apple.com/vn/rss/customerreviews/page=1/id=1137866760/sortby=mostrecent/json).
@@ -53,4 +59,4 @@ Lệnh đọc `reviews.csv` đã cố định để tái tạo `reviews-labeled.
 
 ## 6. Giới hạn
 
-Không suy tỷ lệ review thành tỷ lệ mọi khách hàng hoặc tỷ lệ khiếu nại/tháng. Hai app là hai nguồn đối chiếu, cùng chịu thiên lệch người tự viết review. Trích hai câu có thể mất ngữ cảnh. Regex bỏ sót tiếng lóng, sai chính tả và có thể gắn nhầm ngữ cảnh. Chưa có phỏng vấn, khảo sát hoặc kiểm nhãn độc lập; không khẳng định biết động cơ hay thời gian xử lý thực tế của hãng.
+Không suy tỷ lệ review thành tỷ lệ mọi khách hàng hoặc tỷ lệ khiếu nại/tháng. Hai app là nguồn đối chiếu trong cùng một phương pháp lấy mẫu, không phải hai phương pháp độc lập, và cùng chịu thiên lệch người tự viết review. Trích hai câu có thể mất ngữ cảnh. Regex bỏ sót tiếng lóng, sai chính tả và có thể gắn nhầm ngữ cảnh. Chưa có phỏng vấn, khảo sát hoặc kiểm nhãn độc lập toàn bộ 150 dòng; không khẳng định biết động cơ hay thời gian xử lý thực tế của hãng.

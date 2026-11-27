@@ -26,6 +26,10 @@ prices:
     input: 0.15
     output: 0.60
     source: "Bảng BTC further-reading/model-prices.md, tra 25/11/2026; https://developers.openai.com/api/docs/pricing"
+  - model: openai/gpt-4o-mini
+    input: 0.15
+    output: 0.60
+    source: "Alias model do OpenRouter trả về; cùng mức giá gpt-4o-mini theo bảng BTC further-reading/model-prices.md, tra 25/11/2026; https://developers.openai.com/api/docs/pricing"
   - model: gpt-5-mini
     input: 0.25
     output: 2.00

@@ -10,6 +10,8 @@
 
 **Xử lý review:** lấy mẫu mostrecent, mọi mức sao, khử trùng ID, bỏ tác giả, chỉ trích tối đa hai câu nội dung, che liên hệ và định danh; gắn nhãn từ khóa trên chính đoạn đã lưu. Manifest có URL/hash nguồn. Raw cache ngoài repo. `review_id` là mã nội dung công khai, không phải mã người.
 
+**Rà nhãn:** `missing_wrong` là nhãn từ khóa, không phải số ca thiếu/sai món đã xác minh. Hai dòng khớp gồm một dòng nói không nhận được đơn và một dòng nói về yêu cầu trả thêm phí/không giao hoặc tự hủy; không dòng nào mô tả thiếu hoặc giao sai món. Rà excerpt có mục tiêu theo nhóm từ khóa ghi nhận 0/150 tín hiệu thiếu/sai món trong lần rà này. Regex `delay` bỏ sót ít nhất hai cách nói tự nhiên (xem `evidence/data-mining.md`); chưa gắn nhãn tay độc lập toàn bộ mẫu.
+
 **Nguồn câu thử:** `data_that: app:review_id` là tình huống được diễn đạt lại từ lời review, có thêm mã đơn và điều kiện giả lập để kiểm được. Không khẳng định nguyên văn input là do người thật hỏi, và không gọi phần bổ sung là dữ liệu thật. Phần thêm vào ngoài review được ghi trong ghi chú của từng câu ở `eval/benchmark-gold.json`, ví dụ D06 thêm chữ "giao chậm" để nêu rõ sự cố. Các câu mà review không hỗ trợ được ghi `tu_viet`.
 
 **Quyền và riêng tư:** trích ngắn, có nguồn, không tên; không đăng raw feed. Không dùng đơn, giao dịch, tin nhắn riêng hoặc dữ liệu BTC cấp. Dữ liệu này không đại diện mọi khách hàng.

@@ -1,0 +1,34 @@
+{
+  "collected_at_utc": "2026-11-27T03:12:54.718993+00:00",
+  "processed_at_utc": "2026-11-27T03:31:51.282846+00:00",
+  "sampling": "75 newest unique review IDs per app, mostrecent pages 1-2, all ratings",
+  "count": 150,
+  "sources": [
+    {
+      "app": "shopeefood",
+      "url": "https://itunes.apple.com/vn/rss/customerreviews/page=1/id=1137866760/sortby=mostrecent/json",
+      "sha256": "ef6cc61af2f9ea01a6f1d6149cd565a60fbfdc22e0ef6baa30fd7eed07004568",
+      "fetched_at_utc": "2026-11-27T03:12:53.556869+00:00"
+    },
+    {
+      "app": "shopeefood",
+      "url": "https://itunes.apple.com/vn/rss/customerreviews/page=2/id=1137866760/sortby=mostrecent/json",
+      "sha256": "d80e5aea477177d8424bd3e89ae092b7b2383c2fcdd16c2e9daf6397e83517e1",
+      "fetched_at_utc": "2026-11-27T03:12:53.957693+00:00"
+    },
+    {
+      "app": "grab",
+      "url": "https://itunes.apple.com/vn/rss/customerreviews/page=1/id=647268330/sortby=mostrecent/json",
+      "sha256": "45d370556a0d66c2de6dc843718cdc1fd564f98e622ffe7e9903d811f6875193",
+      "fetched_at_utc": "2026-11-27T03:12:54.361588+00:00"
+    },
+    {
+      "app": "grab",
+      "url": "https://itunes.apple.com/vn/rss/customerreviews/page=2/id=647268330/sortby=mostrecent/json",
+      "sha256": "eab9f64077107b363b6a572a52415ac51979feb9537421ace4d558f87a82a674",
+      "fetched_at_utc": "2026-11-27T03:12:54.718993+00:00"
+    }
+  ],
+  "privacy": "No author names; at most two body sentences; contact details redacted",
+  "scope": "Excerpts only; App Store reviewers are not a representative user sample"
+}

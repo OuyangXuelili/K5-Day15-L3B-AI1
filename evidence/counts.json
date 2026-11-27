@@ -1,0 +1,78 @@
+{
+  "rules_version": "keywords-v1",
+  "denominator": "Every retained review, all star ratings",
+  "groups": {
+    "all": {
+      "n": 150,
+      "ratings": {
+        "1": 104,
+        "5": 39,
+        "2": 2,
+        "3": 5
+      },
+      "contexts": {
+        "food": 110,
+        "unclear": 35,
+        "ride": 5
+      },
+      "keyword_mentions": {
+        "fees_promotions": 14,
+        "delay": 39,
+        "support": 16,
+        "refund": 3,
+        "cancel": 17,
+        "missing_wrong": 2
+      },
+      "support_or_refund": 18,
+      "food_support_signal": 11
+    },
+    "shopeefood": {
+      "n": 75,
+      "ratings": {
+        "1": 45,
+        "5": 27,
+        "2": 2,
+        "3": 1
+      },
+      "contexts": {
+        "food": 75
+      },
+      "keyword_mentions": {
+        "fees_promotions": 8,
+        "delay": 23,
+        "support": 6,
+        "refund": 1,
+        "cancel": 6,
+        "missing_wrong": 1
+      },
+      "support_or_refund": 6,
+      "food_support_signal": 6
+    },
+    "grab": {
+      "n": 75,
+      "ratings": {
+        "1": 59,
+        "5": 12,
+        "3": 4
+      },
+      "contexts": {
+        "food": 35,
+        "unclear": 35,
+        "ride": 5
+      },
+      "keyword_mentions": {
+        "delay": 16,
+        "refund": 2,
+        "cancel": 11,
+        "fees_promotions": 6,
+        "support": 10,
+        "missing_wrong": 1
+      },
+      "support_or_refund": 12,
+      "food_support_signal": 5
+    }
+  },
+  "hypothesis_threshold": 5,
+  "hypothesis_signal_observed": true,
+  "limits": "Keyword mentions are screening signals, not verified incidents; categories overlap. No independent human coding. Context inference may be wrong; inspect examples."
+}

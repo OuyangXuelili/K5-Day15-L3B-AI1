@@ -1,6 +1,6 @@
 # AI SPEC — Hỗ trợ khiếu nại đơn giao đồ ăn · AI1 · L3B
 
-Track **D1**. Phòng/zone chờ BTC phân. Bản chuẩn bị ngày 27/11/2026; chưa chạy API theo yêu cầu người dùng. Bộ câu thử v2 và chuẩn ở §7 **chốt tại CP2 (27/11)**, giữ nguyên tới hạn chót.
+Track **D1**. Phòng/zone theo đăng ký và cổng tra cứu BTC. Bản CP2 ngày 27/11/2026; đã có 5 output model thật để hiệu chỉnh cách chấm (`eval/calibration/`), chưa chạy hai lượt eval chính thức. Bộ câu thử v2 và chuẩn ở §7 **chốt tại CP2 (27/11)**, giữ nguyên tới hạn chót.
 
 ## §0. Hiện tại việc này diễn ra thế nào
 
@@ -51,7 +51,7 @@ Hình dạng **workflow cố định**, một lời gọi model/lượt. Đườ
 
 AI quyết định loại sự cố/món được nhắc; tiền tính từ dữ liệu bằng code, không tin con số model. JSON sai thì hỏi lại, không trả tiền. G10: thiếu đơn/món/ảnh hoặc mơ hồ thì thu hẹp bằng một yêu cầu bổ sung; G1/G2: banner ghi mode và giới hạn; G11: hiện policy/mã đơn; G8/G9: khách sửa nội dung và thử lại. Nhân viên có quyền duyệt, từ chối và đối soát; UI chỉ ghi trạng thái chờ, không giả làm đã gửi nhân viên.
 
-Phần giả: đơn, chính sách, cờ ảnh, preview phân loại bằng regex khi provider=fake. Phần AI thật đã viết adapter nhưng chưa gọi/chưa xác minh kết nối. Đừng coi preview là AI.
+Phần giả: đơn, chính sách, cờ ảnh, preview phân loại bằng regex khi provider=fake. Adapter OpenRouter đã trả 5 output hiệu chỉnh bằng `openai/gpt-4o-mini`, lưu model và token tại `eval/calibration/outputs.json`; adapter OpenAI trực tiếp chưa có bằng chứng chạy riêng. Chưa chạy lượt eval chính thức hoặc video AI thật. Đừng coi preview là AI.
 
 ## §5. Chỗ khó — bốn lớp
 
@@ -109,5 +109,6 @@ Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm t
 | 27/11 trước CP2 | Cập nhật trách nhiệm bốn thành viên | TEAMS.md; đồng bộ Canvas, README và phần trình bày |
 | 27/11 trước CP2 | Quang bổ sung nền dữ liệu: 80 đơn, 24 ca khó riêng, kiểm số lượng hoàn một phần và thanh toán, đồng bộ demo | Giữ nguyên 50 đơn cũ, benchmark, metric, policy và bộ chạy; kiểm offline, chưa gọi API |
 | 27/11 trước CP2 (Ân) | Thay bộ câu thử v1 bằng v2 (30 câu, lời khách thật); chốt `metric_spec.yaml` và chuẩn §7; `grade.py` so đúng kiểu và đếm điều kiện cứng; thêm `diagnose.py`, chấm thử 5 output (khớp 5/5); `test_contracts` chuyển sang kiểm hợp đồng vì preview không còn đạt mọi câu | Regex preview đạt 30/30 trên v1 nên bộ v1 không phân biệt được AI; v2: regex 17/30. Qua bốn lượt review độc lập; Quang duyệt D10, D18, D19 và chuẩn §7. Chi tiết `eval/benchmark-notes.md` |
+| 27/11 trước CP2 (Quang) | Pull bản `1913e3e`; đồng bộ Canvas và trạng thái hiệu chỉnh; đếm `invented_source` theo metric hiện có; sửa xuất UTF-8 của verify/chẩn đoán và bổ sung kiểm thử | Không thay benchmark, nhãn vàng, metric, §7, dữ liệu hoặc phiếu chấm đã lưu; lượt sửa chỉ kiểm offline, không gọi thêm API |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

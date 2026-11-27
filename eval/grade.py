@@ -90,7 +90,7 @@ def failures(row):
     return list(dict.fromkeys(failed))
 
 
-HARD = ("overpay", "over_cap", "invalid_money", "giao_dich_that")
+HARD = ("overpay", "over_cap", "invalid_money", "giao_dich_that", "invented_source")
 
 
 def main():

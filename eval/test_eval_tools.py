@@ -67,6 +67,25 @@ class DiagnoseTests(unittest.TestCase):
         r = self.diag(*make_run(self.tmp))
         self.assertEqual(r.returncode, 0, r.stderr); self.assertIn("Đạt 17/30", r.stdout)
 
+    def test_invented_source_is_counted_even_with_high_pass_rate(self):
+        csv_path, trace = make_run(self.tmp)
+        rows = list(csv.DictReader(csv_path.read_text(encoding="utf-8").splitlines()))
+        for row in rows:
+            expected = json.loads(row["expected"])
+            output = {**expected, "citations": [expected["policy_id"]] + ([expected["order_id"]] if expected.get("order_id") else [])}
+            if row["id"] == "D12":
+                output["citations"].append("P999")
+            row["output"] = json.dumps(output, ensure_ascii=False)
+        with csv_path.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=list(rows[0])); writer.writeheader(); writer.writerows(rows)
+        env = dict(ENV, PYTHONUTF8="0", PYTHONIOENCODING="cp1258:strict")
+        r = subprocess.run([sys.executable, "eval/diagnose.py", str(csv_path), "--trace", str(trace)],
+                           capture_output=True, text=True, encoding="utf-8", env=env, cwd=ROOT)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("Đạt 29/30", r.stdout)
+        hard = next(line for line in r.stdout.splitlines() if line.startswith("Điều kiện cứng:"))
+        self.assertIn("invented_source 1 (D12)", hard)
+
     def test_trace_without_run_id_is_rejected(self):
         def strip(events):
             for e in events:
@@ -127,6 +146,13 @@ class VerifyTests(unittest.TestCase):
 
     def test_clean_copy_passes(self):
         r = self.verify(); self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_verify_works_with_legacy_output_encoding(self):
+        env = dict(ENV, PYTHONUTF8="0", PYTHONIOENCODING="cp1258:strict")
+        r = subprocess.run([sys.executable, str(self.tmp / "eval/build_benchmark_v2.py"), str(self.tmp), "--verify"],
+                           capture_output=True, text=True, encoding="utf-8", env=env, cwd=ROOT)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("Không lệch (30 câu, CSV + nhãn vàng).", r.stdout)
 
     def test_extra_and_duplicate_ids_fail(self):
         rows = self.rows(); self.write(rows + [dict(rows[0], id="D99")])

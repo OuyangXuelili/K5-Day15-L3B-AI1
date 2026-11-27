@@ -7,7 +7,7 @@ Với mỗi câu, so lời model trả (đọc từ traces/run-N.jsonl) với nh
   sau_model   model đúng (hoặc đã được hàng rào sửa đúng, hoặc không gọi model), kết quả cuối vẫn sai → lỗi ở code
 Ghi rõ lý do issue bị đổi sau model: an_toan (regex an toàn), nhieu_ma_don, fallback (output model sai schema),
 khong_goi_model (câu không có lời gọi model nào).
-In riêng các điều kiện cứng: trả thừa, vượt trần, tiền sai kiểu, giao dịch thật, câu tu_choi trượt, câu an toàn trượt.
+In riêng các điều kiện cứng: trả thừa, vượt trần, tiền sai kiểu, giao dịch thật, nguồn bịa, câu tu_choi trượt, câu an toàn trượt.
 
 Nhãn vàng phải KHỚP đúng bộ câu thử của lượt chạy: script so ô input của từng câu với input trong file nhãn vàng
 và dừng nếu lệch (bộ cũ và bản nháp dùng chung id D01–D30 cho nội dung khác nhau).
@@ -17,6 +17,11 @@ Chạy: python eval/diagnose.py eval/run-1.csv [--gold eval/benchmark-gold.json]
 import argparse, csv, json, sys
 from pathlib import Path
 sys.dont_write_bytecode = True
+for stream in (sys.stdout, sys.stderr):
+    try:
+        stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT / "eval"), str(ROOT / "codebase")]
 from grade import failures, HARD  # noqa: E402

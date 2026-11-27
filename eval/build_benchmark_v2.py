@@ -3,6 +3,11 @@
 KHÔNG lấy từ output của model hay regex preview."""
 import csv, json, sys
 from pathlib import Path
+for stream in (sys.stdout, sys.stderr):
+    try:
+        stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
 _args = [a for a in sys.argv[1:] if not a.startswith("--")]
 REPO = Path(_args[0] if _args else Path(__file__).resolve().parents[1]).resolve()
 sys.path.insert(0, str(REPO / "codebase"))

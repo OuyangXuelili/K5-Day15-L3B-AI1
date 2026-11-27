@@ -89,5 +89,41 @@
     "mobile_viewport_width": 375,
     "mobile_document_scroll_width": 360,
     "horizontal_overflow": false
+  },
+  "cp2_validation": {
+    "checked_at_utc": "2026-11-27T08:46:37.146271+00:00",
+    "base_commit": "1913e3e9ae6b292b9b81186a9784fb4999f32b63",
+    "scope": "Local CP2 documentation and evaluation-tool fixes; not an AI evaluation or a checkpoint submission.",
+    "test_methods_passed": 40,
+    "benchmark_verification": "30 cases, CSV and gold labels match",
+    "invented_source_hard_counter": "Regression passed: 29/30 synthetic successes still report invented_source 1 (D12).",
+    "windows_legacy_encoding_checks": "Verify and diagnose passed with PYTHONIOENCODING=cp1258:strict.",
+    "preserved_files": {
+      "eval/benchmark.csv": "bc4d78f54353341ecc88acde617b8fa984ef6b253f80adb838e47fa9c401aa65",
+      "eval/benchmark-gold.json": "38723d58b976e66995d636b98e45dd57fdd6d7577a29d6edc84f9f6aa5a991b1",
+      "eval/metric_spec.yaml": "cefc17d3f380aab903b459dbe20e0ddfa1f6933b58faacca7fb9ae08270b076b",
+      "data/orders.json": "de5799f5c83ecd774ef931feff8268f629119b61d84d83efc33dc20f3168af76",
+      "data/policies.json": "a5a6b0178270089082599eee8000925eb6eee0bfe4508137348adcce6a99f07e",
+      "evidence/reviews.csv": "731beaba204132f1afd0403e3fc10bc3155c984e65c275536d0ee8e117063b82",
+      "evidence/reviews-labeled.csv": "8ec2781e48e8eeff77afeed1e714dd1edc6b21d755472309b7d1fc4ccbecb332",
+      "evidence/counts.json": "95b651b86a8c079ec3305810fd900bf4090530cccba15ba0d7497028a365a3cb",
+      "eval/calibration/outputs.json": "1c6b9eae895736821117e0b46ed0e325a3a99da439474c8b575657e8eee85c90",
+      "eval/calibration/cham-tay-A.csv": "8f141de9be634463c49ebf87f747f82a5fa525a7cd997f285cbdc0e63301f409",
+      "eval/calibration/cham-tay-B.csv": "5b7996407ad8fa7260a528de0272a36ebe66a53744360763ae19f8d12a8a1641",
+      "eval/calibration/ket-qua.md": "de995aa10dcbdfa63e11abf8e9469abe819ef8c1f1fe5f5a9747c5acbc3bf894",
+      "run.py": "8f3016e7f10844d39145c359de2a25d8ef2ea5d55c7d807312a918f1f2e7f155",
+      "codebase/tracing.py": "53bac60171f7a0924ecc149189dfca7a395d00ffb6f640a56e290d2bb21775a6",
+      "eval/run_eval.py": "b9dca5b51b50ead83e8aedb9f05217762b0cfbe98480f264b4ec8bb0c081ecdd",
+      "cost/simulate.py": "8ce74d0cd2c2c78810ec14412b2599cfe9d8a09eb10512f0ac0c705d6f4fbf70"
+    },
+    "spec_section_7_unchanged": true,
+    "model_api_calls_made_by_this_validation": 0,
+    "calibration_record": "Existing five model outputs and two scoring sheets were preserved; not regenerated.",
+    "remaining_cp3_work": [
+      "Urgent safety path during provider failure",
+      "Quantity language in D20/D21",
+      "Official AI evaluation runs and video"
+    ],
+    "ready_for_final_submission": false
   }
 }

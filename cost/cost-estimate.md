@@ -1,6 +1,6 @@
-# Chi phí khi dùng thật — chưa có số đo API
+# Chi phí khi dùng thật — chưa chạy mô phỏng
 
-**Trạng thái:** chưa chạy API hoặc mô phỏng token theo yêu cầu người dùng. `cost/personas.yaml` đã chuẩn bị 100 phiên, seed 20261127, ba persona, ba kịch bản 300/1.000/5.000 người. Mọi tần suất và quy mô đều ghi rõ tự ước tính, không phải thống kê từ review.
+**Trạng thái:** đã lưu token API của 5 output hiệu chỉnh cách chấm tại `eval/calibration/outputs.json`, chưa chạy mô phỏng chi phí. Không dùng 5 câu này để suy ra cost/phiên hoặc cost/task thành công. `cost/personas.yaml` đã chuẩn bị 100 phiên, seed 20261127, ba persona, ba kịch bản 300/1.000/5.000 người. Mọi tần suất và quy mô đều ghi rõ tự ước tính, không phải thống kê từ review.
 
 Giá theo bảng chung BTC ngày 25/11/2026: gpt-4o-mini input/output 0,15/0,60 USD trên 1M token; gpt-5-mini 0,25/2,00 USD trên 1M token. [Bảng BTC](https://github.com/VinUni-AI20k/K5-L3-Day15-AI-Product-Hackathon/blob/main/further-reading/model-prices.md), [nguồn giá](https://developers.openai.com/api/docs/pricing). Đây là giá để mô phỏng, chưa phải chi phí đã thanh toán.
 

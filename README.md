@@ -9,13 +9,13 @@ Một khách nhập mã đơn và một vấn đề; trợ lý tra đơn/chính 
 | Phần | Đã có | Còn lại |
 |---|---|---|
 | Bằng chứng | 150 review, hai app, cách lấy mẫu, nhãn từng dòng và số đếm tái tạo được | Kiểm nhãn/người dùng độc lập nếu nhóm làm thêm |
-| Demo | Web local, workflow, công cụ tra cứu, kiểm tiền và rủi ro | Nối thử model thật khi được phép |
+| Demo | Web local, workflow, công cụ tra cứu, kiểm tiền và rủi ro; đã có 5 output hiệu chỉnh bằng model thật | Video AI thật và nghiệm thu luồng trước CP3 |
 | Dữ liệu | 80 đơn giả lập, 10 chính sách, seed cố định; thêm các mức biên và số lượng món | Chưa xác minh ảnh thật; dữ liệu hoàn toàn giả lập |
-| Đánh giá | 30 câu chính, 24 ca khó bổ sung, 3 metric đề xuất, script chấm, kiểm hợp đồng offline | Chấm độc lập 5 output; hai lượt eval AI và phân tích lỗi |
+| Đánh giá | Bộ v2: 30 câu, 3 metric đã chốt; 24 ca phát triển riêng; hai phiếu chấm thử khớp 5/5 | Hai lượt eval AI chính thức và phân tích lỗi |
 | Chi phí | 100 phiên đã cấu hình, 3 persona, 3 kịch bản, 2 mức giá | Token thật, tỷ lệ đạt lượt 2 và bảng cost |
 | Nộp bài | Repo Public đúng tên, TEAMS đúng mẫu, Canvas/spec và phân công | Slide/video, reflection và nộp checkpoint |
 
-**Theo yêu cầu của người dùng, chưa gọi API.** Chế độ mặc định là `fake`, token 0, giao diện ghi rõ mô phỏng. Không có số accuracy AI hoặc cost đã đo. Không dùng kết quả offline như kết quả AI thật.
+**Hồ sơ CP2 đã có 5 output hiệu chỉnh gọi `openai/gpt-4o-mini` qua OpenRouter**, lưu ở `eval/calibration/`, cùng hai phiếu chấm khớp 5/5. Đây là bước kiểm cách chấm, chưa phải lượt eval chính thức và không dùng để công bố accuracy. Demo mặc định vẫn là `fake`, token 0. Chưa có hai lượt eval chính thức, mô phỏng chi phí hoặc video AI thật. Việc rà/sửa CP2 hiện tại chỉ chạy offline, không gọi thêm API.
 
 ## Chạy demo local
 
@@ -27,7 +27,7 @@ python run.py
 
 Mở **http://127.0.0.1:18115**. Nếu muốn đổi cổng, chép `.env.example` thành `.env`, đổi `APP_PORT`, vẫn giữ `MODEL_PROVIDER=fake` khi chưa muốn gọi API. `.env` không đưa lên Git.
 
-Ảnh giao diện đã chạy local: [demo-preview.jpg](docs/demo-preview.jpg). Ảnh thể hiện chế độ preview, không phải bằng chứng gọi AI thật.
+Ảnh giao diện preview ban đầu: [demo-preview.jpg](docs/demo-preview.jpg). Giao diện hiện tại đã được cập nhật; ảnh này không phải bằng chứng gọi AI thật.
 
 Thử các tình huống trong giao diện:
 
@@ -44,19 +44,19 @@ Muốn chạy dòng lệnh: đặt `APP_MODE=cli` trong `.env`, sau đó `python
 
 ```bash
 python run.py check
-python eval/test_contracts.py
-python eval/test_stress.py
+python eval/build_benchmark_v2.py --verify
+python -m unittest discover -s eval -p "test_*.py"
 python evidence/count.py
 ```
 
 - `run.py check` kiểm cấu trúc benchmark, metric, TEAMS; không xác nhận chấm độc lập, API hoặc đủ mọi tiêu chí rubric.
-- `test_contracts.py` kiểm 30 tình huống chính, trần tiền trên 80 đơn, schema sai, PII, không đọc file tùy ý. `test_stress.py` kiểm 24 ca bổ sung, tổ hợp số lượng/tiền, dữ liệu tái tạo và trạng thái thanh toán. Cả hai chỉ chạy fake/mock cục bộ, không gọi API và không đo accuracy AI.
+- Bốn tệp `test_contracts.py`, `test_stress.py`, `test_grade.py`, `test_eval_tools.py` kiểm hợp đồng luồng, giới hạn tiền, dữ liệu, bộ chấm và chẩn đoán; đều chạy fake/mock cục bộ. Bộ v2 cố ý có ca preview trượt; không lấy kiểm thử hợp đồng làm accuracy AI.
 - `count.py` đếm trên mẫu review đã lưu. `collect_reviews.py --cache <thư-mục-ngoài-repo>` dùng để thu mẫu mới; không thay dữ liệu đã chốt bằng mẫu live.
-- `data/generate.py` tái tạo 80 đơn/10 chính sách với seed 20261127, giữ nguyên 50 đơn ban đầu. `build_benchmark.py` dựng bộ thử trước lượt thật; không chỉnh expected theo output. Bộ 24 ca ở `eval/stress-cases.json` dùng phát triển riêng, không thay benchmark đã chốt.
+- `data/generate.py` tái tạo 80 đơn/10 chính sách với seed 20261127, giữ nguyên 50 đơn ban đầu. Không chạy `data/build_benchmark.py`: script đó dựng bộ v1 cũ. Dùng `eval/build_benchmark_v2.py --verify` để kiểm bộ v2 hiện tại, không ghi đè expected. Bộ 24 ca ở `eval/stress-cases.json` dùng phát triển riêng.
 
-## Khi nhóm cho phép dùng API
+## Khi tiếp tục chạy API cho CP3–CP4
 
-Điền `.env`: `MODEL_PROVIDER=openai`, `MODEL_NAME=gpt-4o-mini`, `API_KEY` local; `MAX_OUTPUT_TOKENS=300`. Có adapter OpenRouter nhưng chưa gọi thử. Không bật mode thật nếu chưa đồng ý chi phí.
+Điền `.env` local bằng cấu hình đã thống nhất. Hồ sơ hiệu chỉnh dùng `MODEL_PROVIDER=openrouter`, `MODEL_NAME=openai/gpt-4o-mini`; adapter OpenAI trực tiếp dùng `MODEL_PROVIDER=openai`, `MODEL_NAME=gpt-4o-mini`. Key chỉ nằm trong `.env`; `MAX_OUTPUT_TOKENS=300`. Không bật mode thật khi chưa được phép chi phí cho lượt chạy tiếp theo.
 
 Sau khi đổi `.env`, dừng server bằng Ctrl+C rồi chạy lại; process đang mở không tự nạp cấu hình mới.
 
@@ -80,11 +80,11 @@ Khung đo token từ API usage; không ước lượng. Lỗi kết nối đư�
 - [Canvas](canvas.md), [spec và kiến trúc](spec.md), [hồ sơ đánh giá](eval/README.md), [báo cáo đánh giá](eval/report.md), [chi phí](cost/cost-estimate.md).
 - [Thành viên và phần việc](TEAMS.md).
 - CP1 17:00 27/11; CP2 19:30 27/11; CP3 10:00 28/11; CP4 14:30 28/11; bản cuối 23:59 28/11 (GMT+7). Chuẩn đánh giá chốt CP2, giữ nguyên sau đó.
-- Nộp từng mốc tại [trang hackathon](https://ai20k-hackathon.pages.dev/#submit); tạo/push repo không đồng nghĩa đã nộp checkpoint. Cả nhóm cần rà phần việc đã ghi trong TEAMS và Canvas trước CP1.
+- Nộp từng mốc bằng [Google Form checkpoint của BTC](https://docs.google.com/forms/d/e/1FAIpQLSdFqBLvf--GLbTUQ2vcFkkKDGsgT-LGT7oftBG_x8Pk-gMVwg/viewform). Dùng cùng tên đội, MSSV trưởng nhóm và repo cho cả bốn mốc. Tạo/push repo không đồng nghĩa đã nộp checkpoint.
 
 ## Dùng AI vào việc gì
 
-AI hỗ trợ đọc đề, lấy mẫu review công khai, viết code và hồ sơ, tạo dữ liệu giả lập/bộ thử, kiểm tự động và soạn phân công. Quang xác nhận thông tin nhóm. Đã rà soát kỹ thuật offline; đánh giá AI thật và chấm độc lập chưa thực hiện. Theo yêu cầu người dùng, chưa gọi API. [Khai báo chi tiết](docs/ai-usage.md).
+AI hỗ trợ đọc đề, lấy mẫu review công khai, viết code và hồ sơ, tạo dữ liệu giả lập/bộ thử, kiểm tự động và soạn phân công. Quang xác nhận thông tin nhóm. Đã rà soát kỹ thuật offline; hồ sơ hiệu chỉnh 5 output model thật và hai phiếu chấm được lưu riêng tại `eval/calibration/`. Hai lượt eval chính thức và mô phỏng chi phí chưa thực hiện. [Khai báo chi tiết](docs/ai-usage.md).
 
 ## Nguồn đề
 

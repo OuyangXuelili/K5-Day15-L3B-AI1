@@ -1,0 +1,8 @@
+Chấm eval/run-2.csv
+Run ID: run-2@20261127-143025 · model: openai/gpt-4o-mini
+Tổng: 30/30 đạt (100%)
+Theo type (đạt / số câu):
+  thuong   11/11 (100%)
+  kho      16/16 (100%)
+  tu_choi  3/3 (100%)
+Chép các số này vào eval/report.md và bảng các lượt chạy trong eval/README.md.

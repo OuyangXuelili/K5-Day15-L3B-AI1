@@ -85,7 +85,7 @@ Data card: `data/DATA_CARD.md`. Bộ câu thử: `eval/benchmark.csv`, 30 câu (
 
 Một câu đạt khi cả ba metric đạt. Trả thiếu (ví dụ hỏi lại thay vì hoàn) chỉ làm trượt câu đó, không vi phạm điều kiện cứng. Các điều kiện cứng được đếm sẵn bằng `python eval/diagnose.py eval/run-N.csv`.
 
-Số đo trước khi gọi API (không phải accuracy AI): regex preview đạt 17/30; classifier hoàn hảo (nhãn vàng) đi qua code hiện tại đạt 28/30, trượt D20 và D21 ở bước đọc số lượng. Kiểm chấm độc lập: hai thành viên nhóm chấm 5 output, khớp 5/5 (`eval/README.md` mục 3). Lượt 1: 24/30, chưa đạt chuẩn. Lượt 2: 30/30, đạt đủ sáu điều kiện, 0 hồi quy; cùng code chạy không gọi model đạt 24/30. Cải tiến được viết sau khi đọc các câu trượt, nên 30/30 là cận trên chứ chưa phải ước lượng cho câu mới. Chi tiết: `eval/report.md` mục 6.
+Số đo trước khi gọi API (không phải accuracy AI): regex preview đạt 17/30; classifier hoàn hảo (nhãn vàng) đi qua code hiện tại đạt 28/30, trượt D20 và D21 ở bước đọc số lượng. Kiểm chấm độc lập: hai thành viên nhóm chấm 5 output, khớp 5/5 (`eval/README.md` mục 3). Lượt 1: 24/30, chưa đạt chuẩn. Lượt 2: 30/30, đạt đủ sáu điều kiện, 0 hồi quy; cùng code chạy không gọi model đạt 24/30. Cải tiến được viết sau khi đọc các câu trượt, nên 30/30 là cận trên. Trên 10 câu mới chốt trước khi chạy (`eval/heldout/`): 9/10, preview cùng code 2/10, 0 vi phạm về tiền; câu trượt H09 vẫn từ chối nhưng trích sai chính sách (P09 thay P08). Chi tiết: `eval/report.md` mục 6–7.
 
 ## §8. Chi phí
 
@@ -118,5 +118,6 @@ Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm t
 | 27/11 sau lượt 1 (Ân) | Đồng bộ trạng thái ở đầu spec, §4 và README: lượt 1 đã chạy, preview dùng chung luật code nên điểm preview tăng sau cải tiến | Sửa mô tả cũ "chưa chạy eval chính thức"; không đổi benchmark, metric, §7 hay kết quả |
 | 27/11 sau cải tiến (Ân) | Chạy lượt 2 chính thức `run-2@20261127-143025`: 30/30, đạt chuẩn §7, 0 hồi quy; so từng câu với lượt 1 (`eval/compare-run-1-2.md`); phân tích phần sửa nhờ model và nhờ code | File khoá giống CP2 (`e807241`), 45 kiểm thử đạt trước khi chạy. 4/6 câu được sửa nhờ luật code; bộ đã nhìn khi sửa nên 30/30 là cận trên (`eval/report.md` mục 6). Không chạy lượt cải tiến thứ ba |
 | 27/11 sau lượt 2 (Ân) | Chạy mô phỏng chi phí `simulate-1@20261127-144132` (100 phiên, 0 lỗi) với tỉ lệ đạt lượt 2; viết lại `cost/cost-estimate.md` | Token đo thật từ trace; giữ nguyên `cost/personas.yaml`. Giả định phút tiết kiệm (1 hay 5 phút) chờ Mạnh chốt |
+| 27/11 sau lượt 2 (Ân) | Thêm bộ held-out 10 câu mới (`eval/heldout/`), chốt nhãn vàng và dự đoán trước khi chạy (`568c842`); chạy một lần: 9/10 | Không sửa code, prompt hay nhãn vàng sau khi xem kết quả; dùng để kiểm 30/30 có giữ được trên câu mới |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

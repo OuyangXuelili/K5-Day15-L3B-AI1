@@ -11,11 +11,11 @@ Một khách nhập mã đơn và một vấn đề; trợ lý tra đơn/chính 
 | Bằng chứng | 150 review, hai app, cách lấy mẫu, nhãn từng dòng và số đếm tái tạo được | Kiểm nhãn/người dùng độc lập nếu nhóm làm thêm |
 | Demo | Web local, workflow, công cụ tra cứu, kiểm tiền và rủi ro; đã có 5 output hiệu chỉnh bằng model thật | Video AI thật và nghiệm thu luồng trước CP3 |
 | Dữ liệu | 80 đơn giả lập, 10 chính sách, seed cố định; thêm các mức biên và số lượng món | Chưa xác minh ảnh thật; dữ liệu hoàn toàn giả lập |
-| Đánh giá | Bộ v2: 30 câu, 3 metric đã chốt; 24 ca phát triển riêng; hai phiếu chấm thử khớp 5/5 | Câu mới chưa nhìn để đo ngoài bộ thử (tuỳ chọn) |
+| Đánh giá | Bộ v2: 30 câu, 3 metric đã chốt; 24 ca phát triển riêng; hai phiếu chấm thử khớp 5/5 | Bộ câu do người ngoài nhóm viết (tuỳ chọn) |
 | Chi phí | 100 phiên đã cấu hình, 3 persona, 3 kịch bản, 2 mức giá | Đã mô phỏng 100 phiên (`cost/cost-estimate.md`); còn chốt giả định phút tiết kiệm |
 | Nộp bài | Repo Public đúng tên, TEAMS đúng mẫu, Canvas/spec và phân công | Slide/video, reflection và nộp checkpoint |
 
-**Hồ sơ CP2 đã có 5 output hiệu chỉnh gọi `openai/gpt-4o-mini` qua OpenRouter**, lưu ở `eval/calibration/`, cùng hai phiếu chấm khớp 5/5. Đây là bước kiểm cách chấm, chưa phải lượt eval chính thức và không dùng để công bố accuracy. Demo mặc định vẫn là `fake`, token 0. Lượt 1 chính thức `run-1@20261127-111429`: **24/30**, chưa đạt chuẩn §7. Lượt 2 `run-2@20261127-143025` sau cải tiến `d860de9` (`docs/cai-tien-luot-2.md`): **30/30**, đạt chuẩn §7, không câu nào hồi quy; bộ thử đã được nhìn khi sửa nên đây là cận trên. Phân tích: `eval/report.md`.
+**Hồ sơ CP2 đã có 5 output hiệu chỉnh gọi `openai/gpt-4o-mini` qua OpenRouter**, lưu ở `eval/calibration/`, cùng hai phiếu chấm khớp 5/5. Đây là bước kiểm cách chấm, chưa phải lượt eval chính thức và không dùng để công bố accuracy. Demo mặc định vẫn là `fake`, token 0. Lượt 1 chính thức `run-1@20261127-111429`: **24/30**, chưa đạt chuẩn §7. Lượt 2 `run-2@20261127-143025` sau cải tiến `d860de9` (`docs/cai-tien-luot-2.md`): **30/30**, đạt chuẩn §7, không câu nào hồi quy; bộ thử đã được nhìn khi sửa nên đây là cận trên. Trên 10 câu mới chốt trước khi chạy: **9/10** (`eval/heldout/`). Phân tích: `eval/report.md`.
 
 ## Chạy demo local
 

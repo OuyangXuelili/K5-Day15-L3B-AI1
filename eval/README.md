@@ -75,6 +75,7 @@ python eval/diagnose.py eval/run-N.csv       # nhóm lỗi + đếm điều ki�
 | Eval AI lượt 1 · `run-1@20261127-111429` | openai/gpt-4o-mini qua OpenRouter | **24/30** (thuong 11/11 · kho 11/16 · tu_choi 2/3) | Chưa đạt chuẩn: <26, D30 không bị từ chối, overpay 2 (D17, D18). Phân tích: `eval/report.md` |
 | Eval AI lượt 2 · `run-2@20261127-143025` | openai/gpt-4o-mini qua OpenRouter | **30/30** (thuong 11/11 · kho 16/16 · tu_choi 3/3) | Đạt chuẩn §7, 0 hồi quy. Sau cải tiến gộp `d860de9`, trên bộ đã nhìn khi sửa nên là cận trên. Phân tích: `eval/report.md` mục 6 |
 | Preview cùng code sau cải tiến | fake, token 0 | 24/30, trượt D02, D12, D13, D17, D25, D26 | Phần model làm đúng mà luật code không làm được |
+| Held-out 10 câu mới · `heldout-run-1@20261127-145609` | openai/gpt-4o-mini qua OpenRouter | **9/10** (preview cùng code 2/10) | Chốt trước khi chạy (`568c842`), chạy một lần. Trượt H09: từ chối đúng nhưng trích P09 thay P08. 0 vi phạm về tiền. `eval/report.md` mục 7, `eval/heldout/` |
 
 ## 6. Giới hạn
 
@@ -82,7 +83,7 @@ python eval/diagnose.py eval/run-N.csv       # nhóm lỗi + đếm điều ki�
 - Năm câu D06, D14, D20, D26, D29 đã được chạy qua model thật trước lượt 1 để hiệu chỉnh cách chấm, nên không coi là chưa nhìn.
 - Không chấm văn phong lời nhắn (`reason`). Lời nhắn do code sinh theo nhánh xử lý; lời hướng dẫn an toàn được giữ bằng test hợp đồng trong `eval/test_eval_tools.py`.
 - Cải tiến trước lượt 2 được viết sau khi đọc 6 câu trượt và đã chạy thử 11 câu bằng model thật; một số luật sát cách viết D20, D21, D30. Kết quả 30/30 của lượt 2 vì vậy là cận trên trên bộ này.
-- Không có tập held-out và không có đánh giá người dùng. Ảnh trong đơn chỉ là cờ dữ liệu giả lập.
+- Bộ held-out chỉ 10 câu, do người đã đọc code soạn; không có đánh giá người dùng. Ảnh trong đơn chỉ là cờ dữ liệu giả lập.
 
 ## 7. Kiểm tra kỹ thuật
 

@@ -18,7 +18,7 @@ Khách đặt đồ ăn đang cần giải quyết một đơn gặp sự cố. 
 | Dự báo/điều phối giao | 39 nhắc giao chậm/chờ/ghép | 1.000×2×3 = 6.000 phút; các thừa số tự ước tính | Loại: cần vị trí, nguồn tiến độ và can thiệp vận hành |
 | Giải thích phí/ưu đãi | 14 nhắc phí/giá/khuyến mãi | 1.000×1×2 = 2.000 phút; các thừa số tự ước tính | Loại: cần giá/ưu đãi cập nhật và điều kiện phức tạp |
 
-Không nhân tỷ lệ review với toàn bộ khách hàng. 1.000 người là quy mô triển khai dự kiến tự ước tính. Persona ở `cost/personas.yaml` cho bình quân 0,9 phiên/người/tháng. 5 phút tiết kiệm/phiên chưa được đo. Hướng chọn có phạm vi làm được và tiêu chí kiểm rõ, không được kết luận có ROI trước thử nghiệm.
+Không nhân tỷ lệ review với toàn bộ khách hàng. 1.000 người là quy mô triển khai dự kiến tự ước tính. Persona ở `cost/personas.yaml` cho bình quân 0,9 phiên/người/tháng. 5 phút là thời gian xử lý của nhân viên tiết kiệm mỗi khiếu nại (tự ước tính, chưa đo); `cost/cost-estimate.md` §4 dùng thêm mức thận trọng 1 phút (900 phút/tháng) và kết luận về chi phí không đổi giữa hai mức. Hướng chọn có phạm vi làm được và tiêu chí kiểm rõ, không được kết luận có ROI trước thử nghiệm.
 
 ## §3. Giải pháp tương tự
 
@@ -119,5 +119,6 @@ Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm t
 | 27/11 sau cải tiến (Ân) | Chạy lượt 2 chính thức `run-2@20261127-143025`: 30/30, đạt chuẩn §7, 0 hồi quy; so từng câu với lượt 1 (`eval/compare-run-1-2.md`); phân tích phần sửa nhờ model và nhờ code | File khoá giống CP2 (`e807241`), 45 kiểm thử đạt trước khi chạy. 4/6 câu được sửa nhờ luật code; bộ đã nhìn khi sửa nên 30/30 là cận trên (`eval/report.md` mục 6). Không chạy lượt cải tiến thứ ba |
 | 27/11 sau lượt 2 (Ân) | Chạy mô phỏng chi phí `simulate-1@20261127-144132` (100 phiên, 0 lỗi) với tỉ lệ đạt lượt 2; viết lại `cost/cost-estimate.md` | Token đo thật từ trace; giữ nguyên `cost/personas.yaml`. Giả định phút tiết kiệm (1 hay 5 phút) chờ Mạnh chốt |
 | 27/11 sau lượt 2 (Ân) | Thêm bộ held-out 10 câu mới (`eval/heldout/`), chốt nhãn vàng và dự đoán trước khi chạy (`568c842`); chạy một lần: 9/10 | Không sửa code, prompt hay nhãn vàng sau khi xem kết quả; dùng để kiểm 30/30 có giữ được trên câu mới |
+| 27/11 sau lượt 2 (Ân, cần Mạnh xác nhận) | Thống nhất giả định impact: mức cơ sở 5 phút xử lý của nhân viên mỗi khiếu nại (như §2), mức thận trọng 1 phút; ghi đơn vị là thời gian nhân viên | `spec.md` §2 ghi 5 phút còn `cost/cost-estimate.md` ghi 1 phút; giữ 5 phút vì đã dùng để so ba hướng trước CP2, thêm 1 phút vì 69% lượt hỏi vẫn cần nhân viên duyệt. Không đổi bảng ba hướng |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

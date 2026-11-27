@@ -1,6 +1,6 @@
 # Khai báo dùng AI
 
-AI hỗ trợ chuẩn bị sản phẩm, dữ liệu và hồ sơ. Mọi kết quả review truy được nguồn; dữ liệu giả lập ghi seed. Hồ sơ CP2 đã lưu 5 output hiệu chỉnh từ `openai/gpt-4o-mini` qua OpenRouter và hai phiếu chấm khớp 5/5 tại `eval/calibration/`; đây không phải lượt eval chính thức. Chưa có phỏng vấn, khảo sát hoặc người dùng thử. Lượt rà/sửa CP2 hiện tại chỉ kiểm offline, không gọi thêm API.
+AI hỗ trợ chuẩn bị sản phẩm, dữ liệu và hồ sơ. Mọi kết quả review truy được nguồn; dữ liệu giả lập ghi seed. Hồ sơ CP2 đã lưu 5 output hiệu chỉnh từ `openai/gpt-4o-mini` qua OpenRouter và hai phiếu chấm khớp 5/5 tại `eval/calibration/`; đây không phải lượt eval chính thức. Chưa có phỏng vấn, khảo sát hoặc người dùng thử. Sau CP2 đã gọi API thật cho lượt 1, lượt 2, mô phỏng chi phí và bộ held-out (`eval/report.md`, `cost/cost-estimate.md`).
 
 | Việc | Công cụ AI | Nội dung hỗ trợ | Kiểm tra và giới hạn | Người phụ trách |
 |---|---|---|---|---|
@@ -13,6 +13,7 @@ AI hỗ trợ chuẩn bị sản phẩm, dữ liệu và hồ sơ. Mọi kết q
 | Hồ sơ và chi phí | Codex | Tổng hợp số đếm, cấu hình persona và giá | Token hiệu chỉnh có trong outputs.json; chưa có accuracy eval chính thức hoặc cost mô phỏng; giả định ghi rõ tự ước tính | Mạnh phụ trách chi phí, Quang ghép hồ sơ |
 | Phân công | Codex | Soạn trách nhiệm bốn người, trạng thái và thứ tự bàn giao | Theo yêu cầu người dùng; không coi phân công là xác nhận việc đã làm | Quang điều phối; cả nhóm rà |
 | Rà soát kỹ thuật | Codex | Kiểm tra cấu trúc, 19 nhóm kiểm thử, 538 tổ hợp số lượng/chính sách, HTTP và demo desktop/mobile | Đạt ở chế độ offline; không thay cho đánh giá AI thật hoặc chấm độc lập | Quang nhận kết quả tích hợp |
+| Đánh giá, phân tích lỗi, chi phí (sau CP2 và trước đó với bộ v2) | Claude (Anthropic) | Dựng lại bộ v2 và nhãn vàng, `grade.py`/`diagnose.py`, script kiểm trước khi chạy lượt; đọc trace để phân tích lỗi lượt 1, phần sửa nhờ model hay code ở lượt 2; soạn `eval/report.md`, cập nhật `cost/cost-estimate.md`; đề xuất 10 câu held-out và nhãn vàng | Ân tự chạy mọi lượt bằng lệnh của mình, số lấy từ file run/trace; hai thành viên chấm tay 5 output khớp 5/5; bộ thử qua bốn lượt review trước CP2; nhãn held-out đối chiếu với `check_limit` và commit trước khi chạy. Người soạn held-out (có AI hỗ trợ) đã đọc code | Ân |
 | Hoàn thiện hồ sơ CP2 | Codex | Đồng bộ trạng thái, sửa bộ đếm nguồn bịa và UTF-8, thêm kiểm thử | Dựa trên bản nhóm đã push; giữ nguyên tiêu chí và hồ sơ chấm; không gọi thêm API | Quang tích hợp |
 
 Không bịa người, câu trả lời, nguồn, kết quả eval hoặc token. Không sửa output/expected/trace để khớp nhau. Thành viên phải đọc, kiểm lại và giải thích phần thực tế mình nhận trước khi ghi reflection.

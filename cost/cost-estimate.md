@@ -30,12 +30,14 @@ Trong 167 lượt hỏi mô phỏng: 62 chuyển nhân viên (`handoff`), 31 nh�
 
 ## 4. So với impact
 
-Chi phí model ở kịch bản cơ sở là **$0,29 / tháng cho 900 phiên**, tức khoảng $0,0003 mỗi phiên. Thời gian tiết kiệm của nhân viên chưa được đo, và hai tài liệu đang dùng hai giả định khác nhau (cần Mạnh chốt một con số):
+Chi phí model ở kịch bản cơ sở là **$0,29 / tháng cho 900 phiên**, tức khoảng $0,0003 mỗi phiên. Impact tính bằng **thời gian xử lý của nhân viên** tiết kiệm được mỗi khiếu nại, không tính thời gian chờ của khách. Con số này chưa được đo, nên dùng một mức cơ sở và một mức thận trọng, cả hai tự ước tính:
 
-| Giả định tiết kiệm / phiên | Thời gian tiết kiệm / tháng (900 phiên) | Ghi ở |
-|---|---:|---|
-| 1 phút | 900 phút ≈ 15 giờ | Bản trước của tài liệu này |
-| 5 phút | 4.500 phút ≈ 75 giờ | `spec.md` §2 |
+| Mức | Tiết kiệm / phiên | Impact / người / tháng (0,9 phiên) | Impact / tháng, 1.000 người (900 phiên) | Chi phí model / người / tháng |
+|---|---:|---:|---:|---:|
+| **Cơ sở** (dùng trong `spec.md` §2 và slide) | 5 phút | 4,5 phút | 4.500 phút ≈ 75 giờ | $0,00029 |
+| Thận trọng | 1 phút | 0,9 phút | 900 phút ≈ 15 giờ | $0,00029 |
+
+Vì sao có hai mức: 5 phút là giả định dùng để so ba hướng ở `spec.md` §2 trước CP2. Mô phỏng cho thấy khoảng 69% lượt hỏi vẫn cần nhân viên duyệt hoặc tiếp nhận (mục 3), nên nhân viên vẫn phải đọc lại đề xuất; phần tiết kiệm chỉ là bước tra đơn, đối chiếu chính sách và soạn đề xuất. Vì vậy giữ thêm mức 1 phút làm cận dưới. **Kết luận không đổi giữa hai mức:** chi phí model đều nhỏ hơn rất nhiều so với giá trị thời gian tiết kiệm.
 
 Repo chưa có giá giờ công nhân viên, nên chưa quy đổi thời gian ra tiền. Điểm hoà vốn với chi phí model rất thấp: chỉ cần thời gian tiết kiệm mỗi phiên có giá trị trên khoảng $0,0003. Vì vậy chi phí model không phải điều quyết định go / no-go. Điều quyết định là đề xuất có đúng không (eval) và nhân viên có thật sự duyệt nhanh hơn không (chưa đo). Chưa tính hosting, lưu trữ và giờ công người duyệt.
 

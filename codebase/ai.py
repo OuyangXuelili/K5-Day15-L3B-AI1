@@ -36,8 +36,8 @@ API_KEY = (os.environ.get("API_KEY") or "").strip()
 def call_model(system: str, user: str) -> dict:
     if MODEL_PROVIDER == "fake":
         from tools import preview_classify
-        message = json.loads(user)["message"]
-        return {"text": json.dumps(preview_classify(message), ensure_ascii=False),
+        payload = json.loads(user)
+        return {"text": json.dumps(preview_classify(payload['message'], payload.get('order')), ensure_ascii=False),
                 "model": "fake", "tokens_in": 0, "tokens_out": 0}
     if MODEL_PROVIDER not in ("openai", "openrouter"):
         raise RuntimeError("Provider chưa được hỗ trợ; chọn openai hoặc openrouter trong .env")

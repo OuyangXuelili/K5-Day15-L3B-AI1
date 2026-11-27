@@ -10,10 +10,10 @@ Một khách nhập mã đơn và một vấn đề; trợ lý tra đơn/chính 
 |---|---|---|
 | Bằng chứng | 150 review, hai app, cách lấy mẫu, nhãn từng dòng và số đếm tái tạo được | Kiểm nhãn/người dùng độc lập nếu nhóm làm thêm |
 | Demo | Web local, workflow, công cụ tra cứu, kiểm tiền và rủi ro | Nối thử model thật khi được phép |
-| Dữ liệu | 50 đơn giả lập, 10 chính sách, seed cố định | Chưa xác minh ảnh thật; dữ liệu hoàn toàn giả lập |
-| Đánh giá | 30 câu, 3 metric đề xuất, script chấm, kiểm hợp đồng offline | Chấm độc lập 5 output; hai lượt eval AI và phân tích lỗi |
+| Dữ liệu | 80 đơn giả lập, 10 chính sách, seed cố định; thêm các mức biên và số lượng món | Chưa xác minh ảnh thật; dữ liệu hoàn toàn giả lập |
+| Đánh giá | 30 câu chính, 24 ca khó bổ sung, 3 metric đề xuất, script chấm, kiểm hợp đồng offline | Chấm độc lập 5 output; hai lượt eval AI và phân tích lỗi |
 | Chi phí | 100 phiên đã cấu hình, 3 persona, 3 kịch bản, 2 mức giá | Token thật, tỷ lệ đạt lượt 2 và bảng cost |
-| Nộp bài | Repo Public đúng tên, TEAMS đúng mẫu, Canvas/spec | Phân công, slide/video, reflection và nộp checkpoint |
+| Nộp bài | Repo Public đúng tên, TEAMS đúng mẫu, Canvas/spec và phân công | Slide/video, reflection và nộp checkpoint |
 
 **Theo yêu cầu của người dùng, chưa gọi API.** Chế độ mặc định là `fake`, token 0, giao diện ghi rõ mô phỏng. Không có số accuracy AI hoặc cost đã đo. Không dùng kết quả offline như kết quả AI thật.
 
@@ -29,11 +29,12 @@ Mở **http://127.0.0.1:18115**. Nếu muốn đổi cổng, chép `.env.example
 
 Ảnh giao diện đã chạy local: [demo-preview.jpg](docs/demo-preview.jpg). Ảnh thể hiện chế độ preview, không phải bằng chứng gọi AI thật.
 
-Thử ba tình huống trong giao diện:
+Thử các tình huống trong giao diện:
 
 - **Giao chậm:** FD001 trễ 45 phút → đề xuất voucher 20.000đ, chờ duyệt.
 - **Thiếu món:** FD007 thiếu cơm I01 → đề xuất đúng giá món trong dữ liệu, chờ duyệt.
 - **Ép vượt chính sách:** từ chối, không thực hiện giao dịch.
+- **Thiếu một phần:** FD061 đặt 3 phần cơm, báo `thiếu 1 phần I01` → đề xuất 35.000đ; chưa rõ số lượng thì hỏi lại.
 
 Đây là dữ liệu/policy của **Quán Mẫu**, không đại diện chính sách ShopeeFood hoặc Grab. Nhánh preview dùng quy tắc để thử luồng, không phải model AI.
 
@@ -44,13 +45,14 @@ Muốn chạy dòng lệnh: đặt `APP_MODE=cli` trong `.env`, sau đó `python
 ```bash
 python run.py check
 python eval/test_contracts.py
+python eval/test_stress.py
 python evidence/count.py
 ```
 
 - `run.py check` kiểm cấu trúc benchmark, metric, TEAMS; không xác nhận chấm độc lập, API hoặc đủ mọi tiêu chí rubric.
-- `test_contracts.py` chỉ chạy fake và mock cục bộ: kiểm 30 tình huống, trần tiền trên 50 đơn, schema sai, PII, không đọc file tùy ý; không gọi API.
+- `test_contracts.py` kiểm 30 tình huống chính, trần tiền trên 80 đơn, schema sai, PII, không đọc file tùy ý. `test_stress.py` kiểm 24 ca bổ sung, tổ hợp số lượng/tiền, dữ liệu tái tạo và trạng thái thanh toán. Cả hai chỉ chạy fake/mock cục bộ, không gọi API và không đo accuracy AI.
 - `count.py` đếm trên mẫu review đã lưu. `collect_reviews.py --cache <thư-mục-ngoài-repo>` dùng để thu mẫu mới; không thay dữ liệu đã chốt bằng mẫu live.
-- `data/generate.py` tái tạo 50 đơn/10 chính sách với seed 20261127. `build_benchmark.py` dựng bộ thử trước lượt thật; không chỉnh expected theo output.
+- `data/generate.py` tái tạo 80 đơn/10 chính sách với seed 20261127, giữ nguyên 50 đơn ban đầu. `build_benchmark.py` dựng bộ thử trước lượt thật; không chỉnh expected theo output. Bộ 24 ca ở `eval/stress-cases.json` dùng phát triển riêng, không thay benchmark đã chốt.
 
 ## Khi nhóm cho phép dùng API
 
@@ -76,12 +78,13 @@ Khung đo token từ API usage; không ước lượng. Lỗi kết nối đư�
 
 - [Bằng chứng](evidence/data-mining.md), [tổng hợp](evidence/summary.md), [data card](data/DATA_CARD.md).
 - [Canvas](canvas.md), [spec và kiến trúc](spec.md), [hồ sơ đánh giá](eval/README.md), [báo cáo đánh giá](eval/report.md), [chi phí](cost/cost-estimate.md).
+- [Thành viên và phần việc](TEAMS.md).
 - CP1 17:00 27/11; CP2 19:30 27/11; CP3 10:00 28/11; CP4 14:30 28/11; bản cuối 23:59 28/11 (GMT+7). Chuẩn đánh giá chốt CP2, giữ nguyên sau đó.
-- Nộp từng mốc tại [trang hackathon](https://ai20k-hackathon.pages.dev/#submit); tạo/push repo không đồng nghĩa đã nộp checkpoint. Cần phân công có tên để hoàn thiện Canvas CP1.
+- Nộp từng mốc tại [trang hackathon](https://ai20k-hackathon.pages.dev/#submit); tạo/push repo không đồng nghĩa đã nộp checkpoint. Cả nhóm cần rà phần việc đã ghi trong TEAMS và Canvas trước CP1.
 
 ## Dùng AI vào việc gì
 
-AI hỗ trợ đọc đề, lấy mẫu review công khai, viết code và hồ sơ, tạo dữ liệu giả lập/bộ thử, kiểm tự động. Quang xác nhận thành viên và đội trưởng; chưa ghi có thành viên chấm output hoặc phỏng vấn khi chưa thực hiện. Theo yêu cầu người dùng, chưa gọi API và chưa phân công chi tiết. [Khai báo chi tiết](docs/ai-usage.md).
+AI hỗ trợ đọc đề, lấy mẫu review công khai, viết code và hồ sơ, tạo dữ liệu giả lập/bộ thử, kiểm tự động và soạn phân công. Quang xác nhận thông tin nhóm. Đã rà soát kỹ thuật offline; đánh giá AI thật và chấm độc lập chưa thực hiện. Theo yêu cầu người dùng, chưa gọi API. [Khai báo chi tiết](docs/ai-usage.md).
 
 ## Nguồn đề
 

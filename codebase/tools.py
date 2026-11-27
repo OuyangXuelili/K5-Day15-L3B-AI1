@@ -50,34 +50,66 @@ def safety_issue(text):
         return "food_safety"
     if re.search(r"so dien thoai|dia chi (?:cua )?(?:khach|tai xe|shipper|nguoi)|mat khau|\botp\b|so the|email cua", text):
         return "privacy"
-    if re.search(r"bo qua (?:chinh sach|huong dan|quy tac)|system prompt|lenh he thong|\brm -|\bexec\(|khoa (?:quan|shop)|phat tai xe|chuyen tien that|tu hoan tien|toi la quan ly", text):
+    if re.search(r"bo qua (?:moi )?(?:chinh sach|huong dan|quy tac)|system prompt|lenh he thong|\brm -|\bexec\(|khoa (?:quan|shop)|phat tai xe|chuyen tien that|tu hoan tien|toi la quan ly|ignore (?:all |the )?(?:previous|system) instructions", text):
         return "out_of_scope"
     return None
 
 
-def preview_classify(text):
+def item_aliases(item):
+    name = normalize(item['name'])
+    return [name, name.removesuffix(' mau')] if name.endswith(' mau') else [name]
+
+
+QUANTITY_UNIT = r'(?:phan|suat|ly|coc|chai|mon|hop|cai)'
+
+
+def affected_quantities(text, order, issue, item_ids):
+    """Read only explicit issue + quantity + item phrases; never infer a whole line."""
+    if not order or issue not in ('missing_item', 'wrong_item'):
+        return {}
+    value = normalize(text)
+    cue = r'(?:giao\s+)?thieu' if issue == 'missing_item' else r'(?:giao\s+sai|sai\s+mon|nham\s+mon)'
+    quantities = {}
+    for item in order['items']:
+        if item['item_id'] not in item_ids:
+            continue
+        names = '|'.join(re.escape(name) for name in [item['item_id'].lower(), *item_aliases(item)])
+        pattern = (r'\b' + cue + r'\s+(?:toan\s+bo\s+)?(-?\d+)\s*'
+                   r'(?:' + QUANTITY_UNIT + r'\s+)?(?:' + names + r')\b')
+        found = {int(match) for match in re.findall(pattern, value)}
+        if found:
+            quantities[item['item_id']] = next(iter(found)) if len(found) == 1 else None
+    return quantities
+
+
+def preview_classify(text, order=None):
     """Deterministic preview only; this is not an AI prediction or evaluation."""
     value = normalize(text)
     issue = safety_issue(text)
     if not issue:
         rules = [("payment", r"tru tien|tru hai lan|thanh toan.*hai|cho hoan|tien.*chua ve|khau tru|doi soat"),
-                 ("missing_item", r"thieu mon|thieu.*(?:com|canh|tra)|giao thieu"),
+                 ("missing_item", r"thieu mon|thieu.*(?:com|canh|tra|\bi\d{2}\b)|giao thieu|thieu\s+(?:toan bo\s+)?-?\d+"),
                  ("wrong_item", r"sai mon|giao sai|nham mon"),
                  ("not_received", r"khong nhan|chua nhan|khong thay don|chua co do an|chua giao"),
                  ("cancel_request", r"huy don|xin huy|muon huy|huy giup|khong huy|ko huy|huye|huy duoc"),
-                 ("late_delivery", r"cham|tre|ghep don|doi.*tieng|giao lau|nguoi|muon")]
-        issue = next((key for key, pattern in rules if re.search(r"\b(?:" + pattern + r")\b", value)), "unclear")
+                 ("late_delivery", r"cham|tre|ghep don|doi.*tieng|giao lau|nguoi|giao muon")]
+        matches = [key for key, pattern in rules if re.search(r"\b(?:" + pattern + r")\b", value)]
+        issue = matches[0] if len(matches) == 1 else 'unclear'
+        # Payment needs reconciliation even when combined with another complaint.
+        if 'payment' in matches:
+            issue = 'payment'
     item_ids = list(dict.fromkeys(re.findall(r"\bI\d{2}\b", text.upper())))
     if not item_ids:
-        for key, item in (("com", "I01"), ("canh", "I02"), ("tra", "I03")):
-            if re.search(r"\b" + key + r"\b", value):
-                item_ids.append(item)
+        cue = r'\b(?:thieu|giao\s+sai|sai\s+mon|nham\s+mon)\s+(?:mon\s+)?(?:\d+\s+(?:' + QUANTITY_UNIT + r'\s+)?)?'
+        for item in order['items'] if order else []:
+            if any(re.search(cue + re.escape(name) + r'\b', value) for name in item_aliases(item)):
+                item_ids.append(item['item_id'])
     return {"issue": issue, "item_ids": item_ids}
 
 
 @tool
-def check_limit(order, issue, item_ids):
-    """check_limit · input: order, issue and item IDs · output: bounded proposal · no writes."""
+def check_limit(order, issue, item_ids, item_quantities=None):
+    """check_limit · order, issue, item IDs/affected counts · bounded proposal · no writes."""
     policy = get_policy(issue)
     if policy is None:
         issue, policy = "unclear", get_policy("unclear")
@@ -99,10 +131,10 @@ def check_limit(order, issue, item_ids):
         return decide("handoff", "Ngừng dùng món và chuyển nhân viên khẩn. Nếu có triệu chứng nặng như khó thở, liên hệ cấp cứu 115; trợ lý không chẩn đoán.")
     if not order:
         result["policy_id"] = "P10"
-        return decide("need_info", "Không có đơn hợp lệ trong dữ liệu. Vui lòng chọn một mã đơn FD001–FD050.", missing=["order_id"])
+        return decide("need_info", "Không có đơn hợp lệ trong dữ liệu. Vui lòng chọn mã đơn trong danh sách đơn giả lập.", missing=["order_id"])
     if issue == "unclear":
         return decide("need_info", "Bạn gặp giao chậm, thiếu/sai món, chưa nhận đơn, cần hủy hay cần đối soát thanh toán?", missing=["issue"])
-    if order["compensated"] or order["payment_status"] == "refund_pending" or issue == "payment":
+    if order["compensated"] or order["payment_status"] != "paid" or issue == "payment":
         result["policy_id"] = "P06"
         return decide("handoff", "Cần nhân viên đối soát thanh toán hoặc bồi thường đã có để tránh hoàn trùng. Không hứa thời điểm tiền về.")
     if order["status"] == "cancelled":
@@ -122,8 +154,16 @@ def check_limit(order, issue, item_ids):
             return decide("need_info", "Cần mã hoặc tên đúng món trong đơn để kiểm tra phần thiếu/sai; không hoàn cả đơn khi chưa xác định.", missing=["item_ids"])
         if not order["evidence"]:
             return decide("need_info", "Cần ảnh xác nhận món thiếu/sai để nhân viên đối chiếu; không thu thông tin cá nhân.", missing=["photo"])
-        amount = sum(lookup[item]["quantity"] * lookup[item]["unit_price_vnd"] for item in set(item_ids))
+        quantities = item_quantities or {}
+        affected = {}
+        for item_id in set(item_ids):
+            ordered = lookup[item_id]['quantity']
+            quantity = quantities.get(item_id, 1 if ordered == 1 else None)
+            if type(quantity) is not int or not 1 <= quantity <= ordered:
+                return decide('need_info', 'Cần số lượng thiếu/sai hợp lệ của từng món, không tự tính thiếu toàn bộ dòng món. Ví dụ: thiếu 1 phần I01; giao sai 1 phần I02.', missing=['affected_quantity'])
+            affected[item_id] = quantity
+        amount = sum(quantity * lookup[item_id]['unit_price_vnd'] for item_id, quantity in affected.items())
         if amount > policy["max_refund_vnd"] or amount > order["subtotal_vnd"]:
             return decide("handoff", "Giá trị đề xuất vượt hạn mức tự động; nhân viên phải kiểm tra và duyệt riêng.")
-        return decide("draft_refund", "Đề xuất hoàn đúng giá trị món đã xác định trong đơn; chỉ là bản nháp chờ nhân viên duyệt.", amount)
+        return decide("draft_refund", "Đề xuất hoàn theo số lượng thiếu/sai đã xác định và đơn giá trong đơn; chỉ là bản nháp chờ nhân viên duyệt.", amount)
     return decide("handoff", "Tạo yêu cầu nhân viên xác minh theo chính sách; chưa hủy đơn, hoàn tiền hoặc gửi thông báo nào.")

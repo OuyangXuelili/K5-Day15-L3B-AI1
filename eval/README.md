@@ -2,7 +2,7 @@
 
 ## 1. Dataset và độ phủ
 
-150 review → nhãn và ví dụ có nguồn; 50 đơn + 10 chính sách giả lập → 30 câu kiểm được. Xem `data/DATA_CARD.md`.
+150 review → nhãn và ví dụ có nguồn; 80 đơn + 10 chính sách giả lập → 30 câu chính và 24 ca bổ sung. Xem `data/DATA_CARD.md`.
 
 - 18 `thuong`, 8 `kho`, 4 `tu_choi` (gồm tấn công bỏ chính sách, lộ thông tin, giả danh quản lý, chạy lệnh).
 - 12/30 (40%) tình huống có nguồn `data_that`, diễn đạt lại từ review; 18/30 tự viết. Không có phỏng vấn giả.
@@ -36,9 +36,18 @@ python run.py score eval/run-2.csv
 | Loại kiểm tra | Model/token | Trạng thái |
 |---|---|---|
 | Kiểm hợp đồng offline | fake, token 0 | `python eval/test_contracts.py`: kiểm nhánh xử lý, giới hạn tiền và 30 fixture; đây không phải accuracy AI |
+| Kiểm tình huống khó offline | fake/mock, token 0 | `python eval/test_stress.py`: 24 ca ở `stress-cases.json`, kiểm số lượng và trần tiền; không phải lượt eval AI |
 | Eval AI lượt 1 | Chưa gọi | Chưa có run ID, output, token hoặc % đạt AI |
 | Eval AI lượt 2 | Chưa gọi | Chờ lượt 1 và cải tiến dựa trên lỗi |
 
 ## 6. Giới hạn
 
 Chấm code kiểm hành vi có cấu trúc, không chấm chất lượng ngôn ngữ hay xác minh món thiếu thật từ ảnh. Code hiện chỉ đọc cờ ảnh giả lập. Không có đánh giá AI thật, semantic judge, đánh giá người dùng hoặc held-out. Báo cáo R5 chưa hoàn thành.
+
+## 7. Kiểm tra bổ sung để phát triển
+
+`stress-cases.json` được viết riêng theo policy giả lập, gồm sát ngưỡng trễ/voucher/hoàn tiền, nhiều món và số lượng, mâu thuẫn dữ liệu khách, thanh toán lỗi/chưa trả, nhiều yêu cầu, prompt injection, riêng tư và an toàn khẩn. Số lượng đã dùng để sửa code; không gọi đây là test chưa nhìn hoặc cộng vào kết quả 30 câu chính. Không thay expected hoặc metric đã chốt. Chạy `python eval/test_stress.py` không tạo `run-N.csv`, trace hay số đo token AI.
+
+Số lượng thiếu/sai chỉ nhận khi nêu rõ cùng mã hoặc tên đầy đủ của món, ví dụ `thiếu 1 phần I01`. Chưa rõ số lượng của dòng nhiều phần thì hỏi lại. Khi có API thật, Ân có thể kiểm thêm chất lượng phân loại trên các câu này và ghi kết quả riêng; hai lượt bắt buộc vẫn dùng cùng benchmark chính.
+
+Lần kiểm offline ngày 27/11: 10 nhóm kiểm hợp đồng + 9 nhóm kiểm bổ sung đạt; 30 fixture chính và 24 ca bổ sung đạt trong preview; kiểm 538 tổ hợp số lượng/chính sách, 9 yêu cầu HTTP, demo hoàn một phần trên desktop và 375px. Không gọi API. Chi tiết tại `offline-checks.json`; các số này không phải accuracy AI.

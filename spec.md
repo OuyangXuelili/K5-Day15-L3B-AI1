@@ -86,7 +86,7 @@ Không thu tên/liên hệ khách thật; đơn và giao dịch giả lập. Rev
 
 ## §10. Phân công & changelog
 
-Quang là đội trưởng; Mạnh, Tú, Ân là thành viên. **Chưa chia phần việc**, theo yêu cầu người dùng; không ghi các thành viên đã làm việc chưa thực hiện. AI hỗ trợ đọc đề, code, xử lý review, chuẩn bị hồ sơ và kiểm tự động; người chấm độc lập chưa thực hiện. Chi tiết `docs/ai-usage.md`.
+Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm thu và nộp bài; Tú giao diện/AI/demo; Mạnh bằng chứng/impact/chi phí; Ân đánh giá và phân tích lỗi. Quang + Tú rà kỹ thuật, Mạnh + Ân rà dữ liệu và kết quả; cả nhóm cùng đọc lỗi và tập trình bày. Khai báo hỗ trợ AI: `docs/ai-usage.md`.
 
 | Thời điểm | Thay đổi | Căn cứ |
 |---|---|---|
@@ -94,5 +94,8 @@ Quang là đội trưởng; Mạnh, Tú, Ân là thành viên. **Chưa chia ph�
 | 27/11 trước CP2 | Thu 150 review, sửa ranh giới regex/cách trích hai câu, giữ mẫu số 150 | evidence/count.py và data-mining.md |
 | 27/11 trước CP2 | Dựng 50 đơn/10 quy tắc, workflow, giao diện local, 30 câu và kiểm offline | data/, codebase/, eval/ |
 | 27/11 trước CP2 | Không chạy API theo lựa chọn người dùng | Eval và chi phí thật để trạng thái chưa đo |
+| 27/11 trước CP2 | Rà soát kỹ thuật offline: cấu trúc hợp lệ, 10 nhóm kiểm thử đạt, đối chiếu 150 review/50 đơn/10 quy tắc/30 câu | Giữ nguyên benchmark, metric và bộ chạy; chưa gọi API hoặc chấm độc lập |
+| 27/11 trước CP2 | Cập nhật trách nhiệm bốn thành viên | TEAMS.md; đồng bộ Canvas, README và phần trình bày |
+| 27/11 trước CP2 | Quang bổ sung nền dữ liệu: 80 đơn, 24 ca khó riêng, kiểm số lượng hoàn một phần và thanh toán, đồng bộ demo | Giữ nguyên 50 đơn cũ, benchmark, metric, policy và bộ chạy; kiểm offline, chưa gọi API |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

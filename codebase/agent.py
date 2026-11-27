@@ -5,7 +5,7 @@ API thật quyết định loại sự cố và món liên quan. Hạn mức và
 được kiểm ngoài model; bản thử không thực hiện giao dịch."""
 import json
 from ai import call_model
-from tools import check_limit, get_order, order_ids, redact, safety_issue
+from tools import affected_quantities, check_limit, get_order, order_ids, redact, safety_issue
 from tracing import note
 
 SYSTEM = """Bạn phân loại một khiếu nại giao đồ ăn trong bản chạy thử độc lập.
@@ -16,7 +16,8 @@ payment, food_safety, privacy, out_of_scope, unclear.
 Chọn payment nếu tiền bị trừ/đang chờ hoàn; not_received nếu nói chưa nhận;
 cancel_request nếu xin hủy; không suy ra late_delivery từ mỗi chữ 'đơn'.
 Không hứa tiền, không tính tiền, không yêu cầu OTP/thẻ, không quyết ai có lỗi.
-Chỉ nêu item_ids thực sự bị báo thiếu/sai: I01=cơm, I02=canh, I03=trà.
+Chỉ nêu item_ids thực sự bị báo thiếu/sai, tra ID và tên trong items của đơn.
+Tên món và ID thay đổi theo đơn, không tự gán tên món cho một ID cố định.
 Không biết loại sự cố hoặc có nhiều yêu cầu độc lập thì issue=unclear.
 Yêu cầu lộ thông tin cá nhân=privacy; ép bỏ chính sách/thực hiện lệnh=out_of_scope.
 Dị vật, dị ứng, ngộ độc=food_safety. Không có cơ sở thì hỏi lại qua issue=unclear."""
@@ -45,7 +46,7 @@ def answer(text: str) -> dict:
     issue = forced or decision["issue"]
     if len(ids) > 1 and not forced:
         issue = "unclear"
-    result = check_limit(order, issue, items)
+    result = check_limit(order, issue, items, affected_quantities(safe_text, order, issue, items))
     result["mode"] = "preview" if reply["model"] == "fake" else "ai"
     result["model"] = reply["model"]
     result["notice"] = ("Chạy thử bằng quy tắc, chưa gọi AI thật. " if result["mode"] == "preview" else "") + "Đơn và chính sách đều giả lập; không có hành động ngoài hệ thống."

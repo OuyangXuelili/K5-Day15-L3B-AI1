@@ -1,19 +1,34 @@
 {
-  "checked_at_utc": "2026-11-27T03:31:18.150115+00:00",
+  "checked_at_utc": "2026-11-27T04:26:54.251380+00:00",
   "scope": "offline technical checks only, not an AI evaluation",
   "review_count": 150,
-  "synthetic_orders": 50,
+  "synthetic_orders": 80,
   "synthetic_policies": 10,
   "benchmark_count": 30,
   "benchmark_real_review_scenarios": 12,
   "http_checks": [
     {
-      "case": "late",
+      "case": "partial_quantity",
       "status": 200,
       "expected": 200
     },
     {
-      "case": "missing",
+      "case": "unknown_quantity",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "cap_exact",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "cap_over",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "failed_payment",
       "status": 200,
       "expected": 200
     },
@@ -47,10 +62,32 @@
     "API connection and real eval runs 1/2",
     "100-session real simulation and cost report",
     "independent 5-output calibration",
-    "team assignment",
     "slides and real video",
     "personal reflections",
     "checkpoint submissions"
   ],
-  "ready_for_final_submission": false
+  "ready_for_final_submission": false,
+  "original_order_count_preserved": 50,
+  "preserved_files": {
+    "eval/benchmark.csv": true,
+    "eval/metric_spec.yaml": true,
+    "data/policies.json": true,
+    "run.py": true,
+    "codebase/tracing.py": true,
+    "eval/run_eval.py": true,
+    "cost/simulate.py": true
+  },
+  "main_criteria_unchanged": true,
+  "supplementary_synthetic_cases": 24,
+  "contract_test_methods": 10,
+  "stress_test_methods": 9,
+  "tested_quantity_policy_combinations": 538,
+  "ui_checks": {
+    "partial_quantity_proposal_vnd": 35000,
+    "unknown_quantity": "need_info",
+    "browser_console_errors": 0,
+    "mobile_viewport_width": 375,
+    "mobile_document_scroll_width": 360,
+    "horizontal_overflow": false
+  }
 }

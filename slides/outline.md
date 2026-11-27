@@ -11,4 +11,4 @@
 7. **Kết luận:** hiện ở trạng thái iterate/chưa đánh giá AI. Không khẳng định go hoặc tiết kiệm thật.
 8. **Một tuần tiếp:** kiểm với khách thật, chấm độc lập, quản lý phiên nhiều lượt, xác minh bằng chứng thay cờ ảnh.
 
-Chưa chia người nói trang nào. Chưa có video 30 giây hoặc video dự phòng.
+Phân phần trình bày dự kiến: Quang trang 1/3, Mạnh trang 2/6, Tú trang 4/8, Ân trang 5/7; cả nhóm tập và rà theo [TEAMS.md](../TEAMS.md). Tú phụ trách giao diện, thao tác demo trực tiếp và quay video; Quang tổng hợp để nộp. Chưa có video 30 giây hoặc video dự phòng.

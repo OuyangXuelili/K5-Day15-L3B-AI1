@@ -57,13 +57,15 @@ def parse_decision(text):
         decision = json.loads(text)
     except (ValueError, TypeError):
         return None
-    if not isinstance(decision, dict) or decision.get("issue") not in ISSUES:
+    if not isinstance(decision, dict) or not isinstance(decision.get("issue"), str) or decision["issue"] not in ISSUES:
         return None
-    items = decision.get("item_ids") or []
-    issues = decision.get("issues") or []
+    items = decision.get("item_ids")
+    issues = decision.get("issues")
+    items = [] if items is None else items
+    issues = [] if issues is None else issues
     if not isinstance(items, list) or len(items) > 6 or any(not isinstance(i, str) for i in items):
         return None
-    if not isinstance(issues, list) or any(i not in ISSUES for i in issues):
+    if not isinstance(issues, list) or any(not isinstance(i, str) or i not in ISSUES for i in issues):
         return None
     return {"issue": decision["issue"], "issues": set(issues) | {decision["issue"]}, "item_ids": items}
 

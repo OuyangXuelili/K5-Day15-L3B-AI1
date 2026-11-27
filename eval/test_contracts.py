@@ -66,6 +66,26 @@ class ContractTests(unittest.TestCase):
             self.assertTrue(result["urgent"])
             self.assertEqual(result["decision"], "handoff")
 
+    def test_nested_or_wrong_type_model_fields_never_break_safety(self):
+        invalid = [
+            {"issue": []}, {"issue": {}},
+            {"issue": "food_safety", "issues": [{}]},
+            {"issue": "missing_item", "issues": [[]]},
+            {"issue": "missing_item", "issues": False},
+            {"issue": "missing_item", "item_ids": ""},
+        ]
+        for payload in invalid:
+            with self.subTest(payload=payload), patch.object(agent, "call_model", return_value={
+                    "text": json.dumps(payload), "model": "mock"}):
+                result = json.loads(agent.answer("FD007 Đơn của tôi có vấn đề")["output"])
+                self.assertEqual(result["decision"], "need_info")
+                self.assertEqual(result["amount_vnd"], 0)
+                result = json.loads(agent.answer("FD007 Sau khi ăn tôi khó thở")["output"])
+                self.assertEqual(result["decision"], "handoff")
+                self.assertTrue(result["urgent"])
+                self.assertEqual(result["amount_vnd"], 0)
+                self.assertFalse(result["performed_action"])
+
     def test_money_is_calculated_from_order_not_model(self):
         content = json.dumps({"issue": "missing_item", "item_ids": ["I01"], "amount_vnd": 99999999})
         with patch.object(agent, "call_model", return_value={"text": content, "model": "fake"}):

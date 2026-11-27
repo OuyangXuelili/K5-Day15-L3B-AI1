@@ -87,4 +87,6 @@ python eval/diagnose.py eval/run-N.csv       # nhóm lỗi + đếm điều ki�
 
 ## 7. Kiểm tra kỹ thuật
 
-`test_grade.py` (9 test), `test_eval_tools.py` (12), `test_contracts.py` (10), `test_stress.py` (9) đều chạy offline, không gọi API. Hai kiểm thử mới xác nhận nguồn bịa vẫn bị đếm khi tổng đạt 29/30 và lệnh verify/chẩn đoán xuất đúng UTF-8 khi môi trường dùng CP1258. Từ bộ v2, `test_contracts.py` chỉ kiểm hợp đồng và an toàn tiền của preview, không yêu cầu đạt mọi câu. Riêng `eval/stress-cases.json` (24 ca) là tập phát triển đã nhìn, không cộng vào kết quả bộ chính.
+`test_grade.py` (9 test), `test_eval_tools.py` (12), `test_contracts.py` (11), `test_stress.py` (10), `test_demo_catalog.py` (5): **47 test offline đạt**, không gọi API. Các kiểm thử bao gồm nguồn bịa, UTF-8 dưới CP1258, ánh xạ tên hiển thị, JSON sai kiểu vẫn giữ hướng dẫn khẩn và tên món xung đột không được hoàn tiền. Từ bộ v2, `test_contracts.py` chỉ kiểm hợp đồng và an toàn tiền của preview, không yêu cầu đạt mọi câu. Riêng `eval/stress-cases.json` (24 ca) là tập phát triển đã nhìn, không cộng vào kết quả bộ chính.
+
+Đợt hoàn thiện demo sau các lượt đo có sửa kiểm JSON và tên món (`docs/final-review.md`). Các kết quả AI ở mục 5 thuộc phiên bản đã đo trước sửa đổi này. Phát lại 30 phản hồi model đã lưu của lượt 2 qua code mới không có hồi quy; đây là kiểm offline, không phải lượt đo accuracy AI mới. Không chạy lại held-out và không thay kết quả H09.

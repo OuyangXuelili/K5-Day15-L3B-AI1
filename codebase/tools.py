@@ -92,10 +92,32 @@ def mentioned_items(text, order, item_ids):
         item = lookup.get(item_id)
         if item is None:
             return []
-        names = [item_id.lower(), *item_aliases(item, order)]
-        if not any(re.search(r'\b' + re.escape(name) + r'\b', value) for name in names):
+        if re.search(r'\b' + re.escape(item_id.lower()) + r'\b', value):
+            continue
+        # Tên chung của dữ liệu cũ không mô tả loại món. Với thực đơn có tên cụ thể,
+        # không nhận "cơm chay" thành "cơm gà" chỉ vì cùng bắt đầu bằng "cơm".
+        generic = normalize(item['name']).endswith(' mau')
+        matched = False
+        for name in item_aliases(item, order):
+            for match in re.finditer(r'\b' + re.escape(name) + r'\b', value):
+                tail = value[match.end():]
+                next_word = re.match(r'\s+(\w+)', tail)
+                if (generic or next_word is None or next_word.group(1) in ITEM_PHRASE_END
+                        or re.fullmatch(r'i\d{2}', next_word.group(1))):
+                    matched = True
+                    break
+            if matched:
+                break
+        if not matched:
             return []
     return list(dict.fromkeys(item_ids))
+
+
+# Tiếp nối câu sau tên món; tính từ/nguyên liệu lạ thì hỏi tên hoặc mã thay vì đoán.
+ITEM_PHRASE_END = {'toi', 'minh', 'em', 'xin', 'giup', 'voi',
+                   'nua', 'roi', 'ma', 'nhung', 'va', 'trong', 'o', 'cua', 'khong',
+                   'chua', 'chi', 'con', 'nen', 'vi', 'thi', 'da', 'bi', 'duoc',
+                   'nay', 'do', 'thoi', 'a', 'nhe', 'nha'}
 
 
 QUANTITY_UNIT = r'(?:phan|suat|ly|coc|chai|mon|hop|cai|to|bat|dia|goi|lon|chiec|xien|banh)'

@@ -10,3 +10,7 @@
 | 6 | Mức tự động | Chỉ gợi ý/tạo nháp; mọi hành động tài chính chờ người duyệt, không có kết nối app thật |
 | 7 | Phân công có tên | Quang: nền tảng/thiết kế/nghiệm thu/tích hợp/nộp bài; Tú: giao diện/AI/demo/video; Mạnh: bằng chứng/impact/chi phí; Ân: bộ thử/đánh giá/lỗi. Chi tiết thành viên: TEAMS.md |
 | — | Cập nhật cho CP2 so với bản CP1 | Chuyển bộ thử v1 sang v2: 30 câu (11 thường, 16 khó, 3 từ chối), 11 câu có nguồn review; chốt 3 metric và chuẩn §7. Hoàn thiện sơ đồ/khung demo, data card 80 đơn; đã có 5 output model thật để hiệu chỉnh cách chấm, hai phiếu khớp 5/5. Chưa chạy eval chính thức hoặc mô phỏng chi phí; việc nộp form được xác nhận riêng trên cổng BTC. |
+
+## Cập nhật CP4
+
+Lượt 1 đạt 24/30 → lượt 2 đạt 30/30 trên cùng bộ đã chốt; bộ 10 câu mới đạt 9/10. Mô phỏng 100 phiên, 167 lượt hỏi, 0 lỗi, khoảng $0,00022/task thành công theo tỷ lệ lượt 2 (mức thận trọng $0,00028). Kết luận Iterate: cần đo thời gian xử lý với người thật và sửa ranh giới chính sách; chưa triển khai công khai. PDF, reflection và hồ sơ nghiệm thu được tổng hợp; việc điền/nộp checkpoint xác nhận riêng trên cổng BTC. Số đo thuộc phiên bản trước sửa demo cuối, xem `docs/final-review.md`.

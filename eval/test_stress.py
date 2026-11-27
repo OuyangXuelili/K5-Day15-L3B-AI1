@@ -104,6 +104,23 @@ class StressTests(unittest.TestCase):
                     self.assertEqual(result['policy_id'], 'P06')
                     self.assertEqual(result['amount_vnd'], 0)
 
+    def test_conflicting_dish_names_do_not_authorize_refunds(self):
+        reply = {'text': json.dumps({'issue': 'missing_item', 'item_ids': ['I01']}), 'model': 'mock'}
+        with patch.object(agent, 'call_model', return_value=reply):
+            for dish in ('cơm chay', 'cơm cá', 'cơm gà chiên'):
+                with self.subTest(dish=dish):
+                    result = json.loads(agent.answer('FD061 thiếu 1 phần ' + dish)['output'])
+                    self.assertEqual(result['decision'], 'need_info')
+                    self.assertEqual(result['amount_vnd'], 0)
+                    self.assertIn('item_ids', result['missing_fields'])
+            for text, amount in (('FD061 thiếu 1 phần cơm', 35000),
+                                 ('FD061 thiếu 1 phần cơm gà, xin kiểm tra', 35000),
+                                 ('FD062 thiếu 1 tô bún', 50000)):
+                with self.subTest(text=text):
+                    result = json.loads(agent.answer(text)['output'])
+                    self.assertEqual(result['decision'], 'draft_refund')
+                    self.assertEqual(result['amount_vnd'], amount)
+
     def test_boundary_vouchers_and_free_item(self):
         for order_id, amount in (('FD054', 15000), ('FD055', 20000), ('FD056', 20000), ('FD076', 1)):
             with self.subTest(order=order_id):

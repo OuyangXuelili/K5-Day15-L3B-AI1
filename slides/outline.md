@@ -1,6 +1,6 @@
 # Khung trình bày 8 trang — AI1
 
-Đây là **dàn ý**; file nộp là `demo-slides.pdf` ở thư mục gốc. Số ở trang 5–7 lấy từ `eval/report.md`, `eval/heldout/` và `cost/cost-estimate.md` (cập nhật 27/11 sau lượt 2).
+File nộp là `demo-slides.pdf` ở thư mục gốc; bản HTML có ghi chú là `slides/demo.html`. Đây là dàn ý đối chiếu nội dung. Số ở trang 5–7 lấy từ `eval/report.md`, `eval/heldout/` và `cost/cost-estimate.md` (cập nhật 27/11 sau lượt 2).
 
 1. **Người dùng & pain:** khách có đơn đồ ăn gặp sự cố; 18/150 review nhắc hỗ trợ/hoàn tiền, 11/150 có ngữ cảnh đồ ăn; một trích dẫn nguyên văn và nguồn từ evidence/data-mining.md.
 2. **Vì sao chọn:** ba hướng trong spec §2; chọn khiếu nại vì phạm vi và điều kiện kiểm rõ. Impact 1.000 người × 0,9 phiên × 5 phút = 4.500 phút/tháng, mọi thừa số tự ước tính, chưa đo.
@@ -16,8 +16,8 @@
    - **$0,00022 / task thành công** theo tỉ lệ lượt 2 (100%); mức thận trọng theo lượt 1 (80%): $0,00028.
    - 300 / 1.000 / 5.000 người: $0,086 / $0,29 / $1,44 mỗi tháng; `gpt-5-mini` (chỉ quy đổi giá): $0,16 / $0,53 / $2,63.
    - So với impact: $0,00029 / người / tháng so với 4,5 phút xử lý của nhân viên / người / tháng (mức cơ sở 5 phút mỗi khiếu nại, tự ước tính; mức thận trọng 1 phút → 0,9 phút). Kết luận giống nhau ở cả hai mức. Khoảng 69% lượt hỏi vẫn cần nhân viên duyệt.
-7. **Kết luận (Ân) — đề xuất: iterate**, nhóm chốt trước khi làm PDF.
-   - Vì sao không stop: an toàn tiền giữ ở cả ba lần đo (0 trả thừa, 0 vượt trần, 0 giao dịch thật); 9/10 câu mới; chi phí model không đáng kể (trang 6).
+7. **Kết luận (Ân): Iterate**, đã chốt khi hoàn thiện PDF.
+   - Vì sao không stop: lượt 2 và bộ 10 câu mới có 0 trả thừa, 0 vượt trần, 0 giao dịch thật (lượt 1 có hai ca trả thừa; mô phỏng không chấm theo nhãn vàng); 9/10 câu mới; chi phí model không đáng kể (trang 6).
    - Vì sao chưa go: phút tiết kiệm (trang 2) chưa đo; 69% lượt vẫn cần nhân viên nên giá trị nằm ở duyệt nhanh hơn, chưa chứng minh; câu mới chỉ 10 và đã trượt một câu từ chối; chưa có người dùng thật.
    - Đủ để thử nghiệm nội bộ có nhân viên duyệt mọi đề xuất tiền.
 8. **Một tuần tiếp:** (1) đo thời gian nhân viên xử lý một khiếu nại có và không có đề xuất, để thay giả định 5 phút; (2) sửa ranh giới quyền riêng tư / ngoài phạm vi (H09) và lỗi gán nhầm món của model, rồi đo trên một bộ câu do người ngoài nhóm viết; (3) 2–3 người dùng thử và quản lý phiên nhiều lượt.

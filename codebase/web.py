@@ -2,6 +2,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 import os
+import sys
 from pathlib import Path
 from urllib.parse import urlparse
 from ai import MODEL_PROVIDER
@@ -60,8 +61,11 @@ class Handler(BaseHTTPRequestHandler):
                               "tokens_in": summary["tokens_in"], "tokens_out": summary["tokens_out"]}})
         except (ValueError, TypeError):
             self.reply(400, {"error": "Nhập nội dung từ 1 đến 2.000 ký tự và chọn đơn cần kiểm tra"})
-        except Exception:
-            self.reply(503, {"error": "Chưa xử lý được yêu cầu. Kiểm cấu hình/model hoặc thử lại; không có hành động tài chính nào được thực hiện."})
+        except Exception as exc:
+            # Chỉ in loại lỗi và thông báo (không in nội dung khách nhập) để biết sai key, quota hay mạng.
+            print("[lỗi /api/ask] %s: %s" % (type(exc).__name__, str(exc)[:200]), file=sys.stderr, flush=True)
+            hint = str(exc)[:200].rstrip(". ") + "." if isinstance(exc, RuntimeError) else "Kiểm cấu hình/model hoặc thử lại."
+            self.reply(503, {"error": "Chưa xử lý được yêu cầu. " + hint + " Không có hành động tài chính nào được thực hiện."})
 
     def log_message(self, format, *args):
         return  # Do not persist customer input or headers.
@@ -69,7 +73,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     port = int(os.environ.get("APP_PORT", "18115"))
-    print(f"AI1 Support: http://127.0.0.1:{port} · {'PREVIEW — chưa gọi AI' if MODEL_PROVIDER == 'fake' else 'AI thật'}", flush=True)
+    print(f"AI1 Support: http://127.0.0.1:{port} · {'PREVIEW — chưa gọi AI' if MODEL_PROVIDER == 'fake' else 'chế độ AI (' + MODEL_PROVIDER + ') — chưa kiểm kết nối'}", flush=True)
     server = HTTPServer(("127.0.0.1", port), Handler)
     try:
         server.serve_forever()

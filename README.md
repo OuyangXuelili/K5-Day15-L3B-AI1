@@ -15,7 +15,7 @@ Một khách nhập mã đơn và một vấn đề; trợ lý tra đơn/chính 
 | Chi phí | 100 phiên đã cấu hình, 3 persona, 3 kịch bản, 2 mức giá | Token thật, tỷ lệ đạt lượt 2 và bảng cost |
 | Nộp bài | Repo Public đúng tên, TEAMS đúng mẫu, Canvas/spec và phân công | Slide/video, reflection và nộp checkpoint |
 
-**Hồ sơ CP2 đã có 5 output hiệu chỉnh gọi `openai/gpt-4o-mini` qua OpenRouter**, lưu ở `eval/calibration/`, cùng hai phiếu chấm khớp 5/5. Đây là bước kiểm cách chấm, chưa phải lượt eval chính thức và không dùng để công bố accuracy. Demo mặc định vẫn là `fake`, token 0. Chưa có hai lượt eval chính thức, mô phỏng chi phí hoặc video AI thật. Việc rà/sửa CP2 hiện tại chỉ chạy offline, không gọi thêm API.
+**Hồ sơ CP2 đã có 5 output hiệu chỉnh gọi `openai/gpt-4o-mini` qua OpenRouter**, lưu ở `eval/calibration/`, cùng hai phiếu chấm khớp 5/5. Đây là bước kiểm cách chấm, chưa phải lượt eval chính thức và không dùng để công bố accuracy. Demo mặc định vẫn là `fake`, token 0. Lượt 1 chính thức `run-1@20261127-111429`: **24/30**, chưa đạt chuẩn §7; lượt 2 chạy sau cải tiến `d860de9` (`docs/cai-tien-luot-2.md`). Kết quả các lượt: `eval/report.md`. Mô phỏng chi phí chạy sau lượt 2.
 
 ## Chạy demo local
 

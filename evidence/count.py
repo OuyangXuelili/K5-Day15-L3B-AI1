@@ -41,7 +41,7 @@ def main():
     with (ROOT / "reviews.csv").open(encoding="utf-8", newline="") as f:
         rows = [classify(row) for row in csv.DictReader(f)]
     with (ROOT / "reviews-labeled.csv").open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")  # LF như bản trong git, tránh diff giả CRLF
         writer.writeheader()
         writer.writerows(rows)
     groups = {}

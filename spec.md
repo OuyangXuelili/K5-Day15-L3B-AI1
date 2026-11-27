@@ -1,6 +1,6 @@
 # AI SPEC — Hỗ trợ khiếu nại đơn giao đồ ăn · AI1 · L3B
 
-Track **D1**. Phòng/zone theo đăng ký và cổng tra cứu BTC. Bản CP2 ngày 27/11/2026; đã có 5 output model thật để hiệu chỉnh cách chấm (`eval/calibration/`); lượt 1 chính thức `run-1@20261127-111429` đạt 24/30 (chưa đạt chuẩn §7), lượt 2 chạy sau cải tiến `d860de9` — kết quả ở `eval/report.md`. Bộ câu thử v2 và chuẩn ở §7 **chốt tại CP2 (27/11)**, giữ nguyên tới hạn chót.
+Track **D1**. Phòng/zone theo đăng ký và cổng tra cứu BTC. Bản CP2 ngày 27/11/2026; đã có 5 output model thật để hiệu chỉnh cách chấm (`eval/calibration/`); lượt 1 chính thức `run-1@20261127-111429` đạt 24/30 (chưa đạt chuẩn §7), lượt 2 `run-2@20261127-143025` sau cải tiến `d860de9` đạt 30/30 (đạt chuẩn §7, trên bộ đã nhìn khi sửa nên là cận trên) — chi tiết ở `eval/report.md`. Bộ câu thử v2 và chuẩn ở §7 **chốt tại CP2 (27/11)**, giữ nguyên tới hạn chót.
 
 ## §0. Hiện tại việc này diễn ra thế nào
 
@@ -85,7 +85,7 @@ Data card: `data/DATA_CARD.md`. Bộ câu thử: `eval/benchmark.csv`, 30 câu (
 
 Một câu đạt khi cả ba metric đạt. Trả thiếu (ví dụ hỏi lại thay vì hoàn) chỉ làm trượt câu đó, không vi phạm điều kiện cứng. Các điều kiện cứng được đếm sẵn bằng `python eval/diagnose.py eval/run-N.csv`.
 
-Số đo trước khi gọi API (không phải accuracy AI): regex preview đạt 17/30; classifier hoàn hảo (nhãn vàng) đi qua code hiện tại đạt 28/30, trượt D20 và D21 ở bước đọc số lượng. Kiểm chấm độc lập: hai thành viên nhóm chấm 5 output, khớp 5/5 (`eval/README.md` mục 3). Kết quả lượt 1 và lượt 2: `eval/report.md`.
+Số đo trước khi gọi API (không phải accuracy AI): regex preview đạt 17/30; classifier hoàn hảo (nhãn vàng) đi qua code hiện tại đạt 28/30, trượt D20 và D21 ở bước đọc số lượng. Kiểm chấm độc lập: hai thành viên nhóm chấm 5 output, khớp 5/5 (`eval/README.md` mục 3). Lượt 1: 24/30, chưa đạt chuẩn. Lượt 2: 30/30, đạt đủ sáu điều kiện, 0 hồi quy; cùng code chạy không gọi model đạt 24/30. Cải tiến được viết sau khi đọc các câu trượt, nên 30/30 là cận trên chứ chưa phải ước lượng cho câu mới. Chi tiết: `eval/report.md` mục 6.
 
 ## §8. Chi phí
 
@@ -116,5 +116,6 @@ Phần việc: [TEAMS.md](TEAMS.md). Quang thiết kế, tích hợp, nghiệm t
 | 27/11 sau lượt 1 (Mạnh) | `codebase/ai.py`: báo mã lỗi API rõ hơn, kiểm `choices`/`content` trước khi đọc, kiểm `MAX_OUTPUT_TOKENS` là số; thêm giá `openai/gpt-4o-mini` vào `cost/personas.yaml`; cập nhật evidence, impact, kịch bản phỏng vấn (commit `f71bb2c`) | Đường gọi API thành công không đổi hành vi, nên không ảnh hưởng so sánh lượt 1 → lượt 2; tên model OpenRouter trả về là `openai/gpt-4o-mini` |
 | 27/11 sau lượt 1 (Tú) | Cải tiến trước lượt 2 (commit `d860de9`): model trả thêm `issues`; code ưu tiên yêu cầu huỷ, hỏi làm rõ khi ≥2 sự cố có bồi thường, chỉ giữ món khách thật sự nhắc (`mentioned_items`), đọc số viết bằng chữ và thêm đơn vị, mở rộng mẫu chặn chỉ dẫn giả, kiểm dấu hiệu khẩn trước khi gọi model và bỏ qua câu phủ định | Nhắm cả 6 câu trượt lượt 1 (D10, D17, D18, D20, D21, D30) và đường an toàn — **một lần cải tiến gộp nhiều nhóm lỗi**, nên lượt 2 không tách được tác dụng của từng thay đổi. Trong lúc sửa đã chạy thử 11 câu benchmark bằng model thật; chi tiết `docs/cai-tien-luot-2.md`, `eval/report.md` |
 | 27/11 sau lượt 1 (Ân) | Đồng bộ trạng thái ở đầu spec, §4 và README: lượt 1 đã chạy, preview dùng chung luật code nên điểm preview tăng sau cải tiến | Sửa mô tả cũ "chưa chạy eval chính thức"; không đổi benchmark, metric, §7 hay kết quả |
+| 27/11 sau cải tiến (Ân) | Chạy lượt 2 chính thức `run-2@20261127-143025`: 30/30, đạt chuẩn §7, 0 hồi quy; so từng câu với lượt 1 (`eval/compare-run-1-2.md`); phân tích phần sửa nhờ model và nhờ code | File khoá giống CP2 (`e807241`), 45 kiểm thử đạt trước khi chạy. 4/6 câu được sửa nhờ luật code; bộ đã nhìn khi sửa nên 30/30 là cận trên (`eval/report.md` mục 6). Không chạy lượt cải tiến thứ ba |
 
 Mọi thay đổi sau CP2/CP4 phải bổ sung dòng; không sửa chuẩn, expected hoặc kết quả chạy để làm đẹp số.

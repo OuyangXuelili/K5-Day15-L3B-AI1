@@ -1,6 +1,6 @@
-# Bản nháp bộ câu thử v2 — chờ nhóm duyệt trước CP2 (19:30 27/11)
+# Bộ câu thử v2 — ghi chú thiết kế (đã chốt tại CP2, 27/11)
 
-> Người soạn: Ân (có AI hỗ trợ). Bản này đã sửa theo **ba lượt review độc lập ngày 27/11**. Trạng thái: **nháp**, chưa thay `eval/benchmark.csv`. Khi nhóm đồng ý, thay file chính và cập nhật các file ở mục 7 trước 19:30. Sau CP2 không sửa nữa.
+> Người soạn: Ân (có AI hỗ trợ). Qua bốn lượt review độc lập ngày 27/11; Quang duyệt D10, D18, D19 và chuẩn "đạt". **Đã chốt** thành `eval/benchmark.csv` + `eval/benchmark-gold.json` tại CP2; mục 7 dưới đây là các quyết định đã được áp dụng. Sau CP2 không sửa.
 
 ## 1. Vì sao cần thay
 
@@ -12,7 +12,7 @@ Hậu quả: nhóm không trả lời được câu "AI để làm gì", và lư
 
 Input viết theo giọng khách thật. 11 câu `data_that` giữ đúng tình huống của 11 review khác nhau. Câu nào thêm ý không có trong review thì ý đó chỉ đến từ fixture đơn giả lập, ghi rõ trong cột ghi chú.
 
-`expected` là **điều đúng theo chính sách P01–P10**, không phải điều code hiện đang làm. Mỗi câu có nhãn vàng (loại sự cố, món, số lượng) trong `benchmark-draft-gold.json`. Script `build_benchmark_draft.py` đưa nhãn vàng qua `check_limit` để tính tiền và tra chính sách.
+`expected` là **điều đúng theo chính sách P01–P10**, không phải điều code hiện đang làm. Mỗi câu có nhãn vàng (loại sự cố, món, số lượng) trong `benchmark-gold.json`. Script `build_benchmark_v2.py` đưa nhãn vàng qua `check_limit` để tính tiền và tra chính sách.
 
 Cách làm này có rủi ro vòng lặp, vì `check_limit` cũng là code đang được đánh giá. Để kiểm, reviewer đã **tự suy đáp án của cả 30 câu từ `policies.json` và `orders.json`, không dùng `check_limit`**. Kết quả: mọi trường `expected` đều khớp. Reviewer phát hiện 2 nhãn vàng sai (D03, D16), cả hai đã sửa.
 
@@ -57,7 +57,7 @@ Bản v2 có đúng 30 câu: 11 `thuong`, 16 `kho`, 3 `tu_choi` (D29 và D30 là
 - Ghi lý do `issue` bị đổi sau model: `an_toan`, `nhieu_ma_don` hoặc `fallback`.
 - In riêng sáu điều kiện cứng.
 
-**`build_benchmark_draft.py`:** file CSV hiện có là đáp án đã duyệt. `--verify` so CSV với kết quả tính lại từ nhãn vàng qua code và báo chênh lệch, không ghi file nào. Không có `--force` thì script từ chối ghi đè.
+**`build_benchmark_v2.py`:** file CSV hiện có là đáp án đã duyệt. `--verify` so CSV với kết quả tính lại từ nhãn vàng qua code và báo chênh lệch, không ghi file nào. Không có `--force` thì script từ chối ghi đè.
 
 **Chấm tay:**
 - Đổi D23 lấy D14, để người chấm gặp một ca phải kiểm "hỏi đúng trường".
@@ -78,7 +78,7 @@ Bản v2 có đúng 30 câu: 11 `thuong`, 16 `kho`, 3 `tu_choi` (D29 và D30 là
 - Kiểm schema theo cùng quy tắc với `agent.py`: `ISSUES` và giới hạn 6 món được đọc thẳng từ `agent.py`.
 - Câu không có lời gọi model được ghi `khong_goi_model`, tách khỏi `fallback`.
 
-**`build_benchmark_draft.py --verify`:** kiểm đúng tập id, từ chối id trùng, so `input`, `type`, `source`, `pass_criterion`, `expected` (so JSON đã parse) và từng nhãn vàng trong file gold.
+**`build_benchmark_v2.py --verify`:** kiểm đúng tập id, từ chối id trùng, so `input`, `type`, `source`, `pass_criterion`, `expected` (so JSON đã parse) và từng nhãn vàng trong file gold.
 
 **Test mới `eval/test_eval_tools.py`** (10 test): biến các ca reviewer dựng thành test. Gồm trace thiếu `run_id`; `issue` ngoài danh sách; 7 món; câu không gọi model; dùng nhầm nhãn vàng của bộ cũ; thêm D99, trùng id, `expected` chỉ đổi định dạng, `expected` đổi giá trị, nhãn vàng bị sửa. Có thêm test hợp đồng cho lời hướng dẫn an toàn: nhánh `food_safety` luôn ra `handoff`, P07, `urgent`, 0đ, kèm "Ngừng dùng món" và "115". `test_grade.py` có thêm 3 test về trần.
 
@@ -155,7 +155,7 @@ Nếu model đạt thấp hơn regex ở nhóm câu nào, đó là dữ liệu �
 
 **Thêm mới:** D06 (biên 31 phút), D11 (không dấu), D19 (lời khách mâu thuẫn dữ liệu), D20 và D21 (số lượng viết bằng chữ, đơn vị "tô"), D22 (vượt trần), D18 (một tin hai sự cố), D26 và D27 (an toàn thực phẩm, nâng từ 1 lên 3 câu).
 
-## 7. Việc nhóm cần quyết trước 19:30
+## 7. Quyết định đã chốt trước CP2 (Quang duyệt 27/11)
 
 **1. Ba câu cần phán đoán chính sách.** Đổi hành vi nào thì phải sửa `policies.json` và `expected` trước CP2.
 - D18: theo P10, một tin hai sự cố thì hỏi khách muốn xử lý việc nào trước.
@@ -177,7 +177,7 @@ Trả *thiếu* (ví dụ D20/D21 hỏi lại thay vì hoàn) chỉ tính là tr
 **4. Người thứ hai chấm thử 5 output (R4).** Mỗi người tự chấm cùng 5 output theo `metric_spec.yaml`, chưa trao đổi, rồi ghi số khớp/5 vào `eval/README.md` mục 3. Output sinh bằng `eval/calibration/make_outputs.py`. Script chạy 5 câu D06, D14, D20, D26, D29 qua đúng `agent.py` với model thật và không tạo `run-N.csv`. Phiếu chấm và hướng dẫn nằm trong `eval/calibration/`; `thong_ke.py` tính độ khớp. Kết quả này ghi riêng, tách khỏi lượt AI thật.
 
 **5. Khi chốt, cập nhật đồng bộ:**
-- Đổi `benchmark-draft.csv` thành `benchmark.csv`, đổi `benchmark-draft-gold.json` thành `benchmark-gold.json` (`diagnose.py` tự tìm file này).
+- Đổi `benchmark.csv` thành `benchmark.csv`, đổi `benchmark-gold.json` thành `benchmark-gold.json` (`diagnose.py` tự tìm file này).
 - Sửa số câu và loại câu ở `spec.md` §5/§7, `data/DATA_CARD.md`, `eval/README.md` mục 1.
 - Ghi chú trong DATA_CARD rằng `data/build_benchmark.py` không còn dựng bộ chính.
 - Thêm một dòng vào `spec.md` §10.
@@ -199,7 +199,7 @@ Trả *thiếu* (ví dụ D20/D21 hỏi lại thay vì hoàn) chỉ tính là tr
 ## 9. Tái tạo
 
 ```bash
-python eval/build_benchmark_draft.py --verify   # so đáp án đã duyệt với code, không ghi file
+python eval/build_benchmark_v2.py --verify   # so đáp án đã duyệt với code, không ghi file
 python eval/test_grade.py && python eval/test_eval_tools.py && python eval/test_contracts.py && python eval/test_stress.py
 python eval/diagnose.py eval/run-1.csv    # sau khi có lượt 1
 ```

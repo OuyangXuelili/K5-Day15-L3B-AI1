@@ -23,11 +23,11 @@ def grade(expected, output):
 
 class GradeTests(unittest.TestCase):
     def setUp(self):
-        self.draft = rows("benchmark-draft.csv")
+        self.draft = rows("benchmark.csv")
         self.e = {i: json.loads(r["expected"]) for i, r in self.draft.items()}
 
-    def test_correct_outputs_pass_on_both_sets(self):
-        for name in ("benchmark.csv", "benchmark-draft.csv"):
+    def test_correct_outputs_pass(self):
+        for name in ("benchmark.csv",):
             for i, r in rows(name).items():
                 exp = json.loads(r["expected"])
                 out = correct_output(exp)

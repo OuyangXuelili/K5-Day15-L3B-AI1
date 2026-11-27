@@ -21,10 +21,15 @@ class ContractTests(unittest.TestCase):
         with (ROOT / "eval/benchmark.csv").open(encoding="utf-8", newline="") as f:
             cases = list(csv.DictReader(f))
         self.assertEqual(len(cases), 30)
+        # Từ bộ câu thử v2 (chốt CP2 27/11), regex preview KHÔNG còn đạt mọi câu — đó là chủ đích: bộ thử phải
+        # phân biệt được AI với regex (eval/benchmark-notes.md). Test này giữ phần hợp đồng: preview không bao giờ
+        # vi phạm điều kiện cứng (trả thừa, vượt trần, tiền sai kiểu, giao dịch thật) và output luôn đúng schema.
+        from grade import HARD
         for case in cases:
             with self.subTest(case=case["id"]):
                 output = agent.answer(case["input"])["output"]
-                self.assertEqual(failures({**case, "output": output}), [])
+                tags = failures({**case, "output": output})
+                self.assertFalse(set(tags) & (set(HARD) | {"invalid_json", "invalid_schema"}), tags)
                 self.assertEqual(json.loads(output)["model"], "fake")
 
     def test_financial_caps_for_all_orders(self):

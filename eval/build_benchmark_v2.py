@@ -1,4 +1,4 @@
-"""Dựng eval/benchmark-draft.csv (bản sửa theo review độc lập 27/11). expected tính từ NHÃN ĐÚNG do người viết gán
+"""Dựng / kiểm bộ câu thử v2 chính thức (eval/benchmark.csv + eval/benchmark-gold.json, chốt CP2 27/11). expected tính từ NHÃN ĐÚNG do người viết gán
 (issue, item_ids, số lượng) đưa qua check_limit — tức quy tắc chính sách P01–P10 —
 KHÔNG lấy từ output của model hay regex preview."""
 import csv, json, sys
@@ -74,8 +74,8 @@ for n, (old, text, issue, items, qty, typ, src, note) in enumerate(C, 1):
                  "type": typ, "source": src})
     notes.append({"id": cid, "input": text, "gold_issue": issue, "gold_item_ids": items, "gold_quantity": qty, "ghi_chu": note, **exp})
 
-out = REPO / "eval" / "benchmark-draft.csv"
-gold_path = REPO / "eval" / "benchmark-draft-gold.json"
+out = REPO / "eval" / "benchmark.csv"
+gold_path = REPO / "eval" / "benchmark-gold.json"
 if "--verify" in sys.argv:
     # Đáp án ĐÃ DUYỆT là CSV + file nhãn vàng hiện có. Chế độ này kiểm cả hai file so với bản tính lại từ nhãn vàng
     # qua code: đúng tập id, không id trùng, cùng input/type/source/pass_criterion, expected khớp (so JSON đã parse),
@@ -116,8 +116,8 @@ if "--verify" in sys.argv:
     print("Không lệch (%d câu, CSV + nhãn vàng)." % len(rows) if not problems else "%d chỗ lệch — rà tay trước khi dùng." % len(problems))
     sys.exit(1 if problems else 0)
 if out.exists() and "--force" not in sys.argv:
-    sys.exit("benchmark-draft.csv đã có (bản đã duyệt). Dùng --verify để so, hoặc --force để ghi đè có chủ đích.")
-with out.open("w", encoding="utf-8-sig", newline="") as f:
+    sys.exit("benchmark.csv đã có (bản đã duyệt). Dùng --verify để so, hoặc --force để ghi đè có chủ đích.")
+with out.open("w", encoding="utf-8", newline="") as f:   # không BOM, giống bộ v1 (test_contracts đọc utf-8)
     w = csv.DictWriter(f, fieldnames=["id", "input", "expected", "pass_criterion", "type", "source"])
     w.writeheader(); w.writerows(rows)
 gold_path.write_text(json.dumps(notes, ensure_ascii=False, indent=1), encoding="utf-8")

@@ -44,7 +44,7 @@ def main():
         sys.exit("MODEL_PROVIDER đang là fake. Điền .env (provider thật) rồi chạy lại, hoặc dùng --dry-run để thử.")
     out_dir = Path(tempfile.mkdtemp(prefix="calib-")) if a.dry_run else HERE
 
-    rows = {r["id"]: r for r in csv.DictReader((ROOT / "eval/benchmark-draft.csv").open(encoding="utf-8-sig"))}
+    rows = {r["id"]: r for r in csv.DictReader((ROOT / "eval/benchmark.csv").open(encoding="utf-8-sig"))}
     results = []
     for cid in CASES:
         r = rows[cid]

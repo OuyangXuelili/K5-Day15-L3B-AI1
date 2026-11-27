@@ -1,4 +1,4 @@
-"""Test cho diagnose.py, build_benchmark_draft.py --verify và hợp đồng lời hướng dẫn an toàn.
+"""Test cho diagnose.py, build_benchmark_v2.py --verify và hợp đồng lời hướng dẫn an toàn.
 Các ca lấy từ ba lượt review độc lập ngày 27/11. Chỉ dùng thư mục tạm, không ghi vào repo, không gọi API.
 Chạy: python eval/test_eval_tools.py"""
 import csv, json, os, shutil, subprocess, sys, tempfile, unittest
@@ -19,7 +19,7 @@ def make_run(tmp, mutate_trace=None, run_id="SIM"):
 import csv, json, sys, os
 sys.path[:0] = ["codebase", "eval"]; os.environ["MODEL_PROVIDER"] = "fake"
 import tracing, agent
-rows = list(csv.DictReader(open("eval/benchmark-draft.csv", encoding="utf-8-sig")))
+rows = list(csv.DictReader(open("eval/benchmark.csv", encoding="utf-8-sig")))
 out, tr = [], []
 for r in rows:
     tracing.begin(r["id"]); res = agent.answer(r["input"]); _, ev = tracing.end()
@@ -55,7 +55,7 @@ class DiagnoseTests(unittest.TestCase):
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def diag(self, csv_path, trace):
-        return run("eval/diagnose.py", csv_path, "--trace", trace, "--gold", "eval/benchmark-draft-gold.json")
+        return run("eval/diagnose.py", csv_path, "--trace", trace, "--gold", "eval/benchmark-gold.json")
 
     def group(self, out, name):
         return next(l for l in out.splitlines() if l.strip().startswith(name)).split()[2:]
@@ -92,13 +92,13 @@ class DiagnoseTests(unittest.TestCase):
         self.assertIn("khong_goi_model", line); self.assertNotIn("fallback", line)
 
     def test_gold_of_other_set_is_rejected(self):
-        old = self.tmp / "run-8.csv"
-        rows = list(csv.DictReader((ROOT / "eval/benchmark.csv").read_text(encoding="utf-8-sig").splitlines()))
-        with old.open("w", encoding="utf-8", newline="") as f:
-            w = csv.DictWriter(f, fieldnames=list(rows[0]) + ["run_id", "output", "error"]); w.writeheader()
-            w.writerows([{**r, "run_id": "SIM", "output": "{}", "error": ""} for r in rows])
-        _, trace = make_run(self.tmp)
-        r = self.diag(old, trace)
+        # Lượt chạy trên một bộ có input khác nhãn vàng (vd bộ cũ v1 dùng chung id D01–D30) phải bị chặn.
+        csv_path, trace = make_run(self.tmp)
+        rows = list(csv.DictReader(csv_path.read_text(encoding="utf-8").splitlines()))
+        rows[4]["input"] = "FD002 Đơn giao trễ đúng 30 phút, có được voucher không?"
+        with csv_path.open("w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+        r = self.diag(csv_path, trace)
         self.assertNotEqual(r.returncode, 0); self.assertIn("không khớp", r.stdout + r.stderr)
 
 
@@ -108,15 +108,15 @@ class VerifyTests(unittest.TestCase):
         for d in ("codebase", "data"):
             shutil.copytree(ROOT / d, self.tmp / d, ignore=shutil.ignore_patterns("__pycache__"))
         (self.tmp / "eval").mkdir()
-        for f in ("benchmark-draft.csv", "benchmark-draft-gold.json", "build_benchmark_draft.py"):
+        for f in ("benchmark.csv", "benchmark-gold.json", "build_benchmark_v2.py"):
             shutil.copy(ROOT / "eval" / f, self.tmp / "eval" / f)
-        self.csv = self.tmp / "eval/benchmark-draft.csv"; self.gold = self.tmp / "eval/benchmark-draft-gold.json"
+        self.csv = self.tmp / "eval/benchmark.csv"; self.gold = self.tmp / "eval/benchmark-gold.json"
 
     def tearDown(self):
         shutil.rmtree(self.tmp, ignore_errors=True)
 
     def verify(self):
-        return run(self.tmp / "eval/build_benchmark_draft.py", self.tmp, "--verify")
+        return run(self.tmp / "eval/build_benchmark_v2.py", self.tmp, "--verify")
 
     def rows(self):
         return list(csv.DictReader(self.csv.read_text(encoding="utf-8-sig").splitlines()))

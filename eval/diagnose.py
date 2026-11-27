@@ -79,7 +79,7 @@ def main():
     ap.add_argument("--gold", type=Path)
     ap.add_argument("--trace", type=Path)
     a = ap.parse_args()
-    gold_path = a.gold or next((p for p in (ROOT / "eval/benchmark-gold.json", ROOT / "eval/benchmark-draft-gold.json") if p.exists()), None)
+    gold_path = a.gold or next((p for p in (ROOT / "eval/benchmark-gold.json",) if p.exists()), None)
     if not gold_path:
         sys.exit("Không thấy file nhãn vàng; truyền --gold")
     gold = {g["id"]: g for g in json.loads(gold_path.read_text(encoding="utf-8"))}

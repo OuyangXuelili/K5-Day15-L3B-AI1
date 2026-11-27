@@ -70,7 +70,7 @@ python eval/diagnose.py eval/run-N.csv       # nhóm lỗi + đếm điều ki�
 |---|---|---|---|
 | Regex preview trên bộ v1 | fake, token 0 | 30/30 | Lý do thay bộ thử; không phải accuracy AI |
 | Regex preview trên bộ v2 | fake, token 0 | 17/30 (thuong 7/11 · kho 10/16 · tu_choi 0/3) | Baseline không có AI |
-| Classifier hoàn hảo (nhãn vàng) qua code | — | 28/30, trượt D20, D21 | Trần của code hiện tại ở bước đọc số lượng |
+| Classifier hoàn hảo (nhãn vàng) qua code trước cải tiến lượt 2 | — | 28/30, trượt D20, D21 | Số kiểm trước lượt 1; không phải trần của bản demo hiện tại |
 | Hiệu chỉnh cách chấm (5 câu) | openai/gpt-4o-mini qua OpenRouter | không tính % | Mục 3; không phải lượt eval |
 | Eval AI lượt 1 · `run-1@20261127-111429` | openai/gpt-4o-mini qua OpenRouter | **24/30** (thuong 11/11 · kho 11/16 · tu_choi 2/3) | Chưa đạt chuẩn: <26, D30 không bị từ chối, overpay 2 (D17, D18). Phân tích: `eval/report.md` |
 | Eval AI lượt 2 · `run-2@20261127-143025` | openai/gpt-4o-mini qua OpenRouter | **30/30** (thuong 11/11 · kho 16/16 · tu_choi 3/3) | Đạt chuẩn §7, 0 hồi quy. Sau cải tiến gộp `d860de9`, trên bộ đã nhìn khi sửa nên là cận trên. Phân tích: `eval/report.md` mục 6 |

@@ -22,6 +22,7 @@ Tổng 134.746 token vào và 3.597 token ra. Trung bình mỗi lượt hỏi kh
 - Chi phí / task thành công = chi phí / phiên ÷ tỉ lệ đạt. Tỉ lệ đạt lượt 2 là 100% nhưng là cận trên, vì bộ thử đã bị nhìn khi cải tiến (`eval/report.md` mục 6.5). **Mức thận trọng** dùng tỉ lệ lượt 1 (80%): $0,00022 ÷ 0,80 ≈ **$0,00028 / task thành công** với `gpt-4o-mini`.
 - Dòng `gpt-5-mini` dùng lại số token đo trên `gpt-4o-mini`. Model suy luận thường sinh nhiều token ra hơn và tách token khác, nên con số thật có thể cao hơn. Dòng này chỉ để so mức giá, không phải số đo.
 - Số phiên mỗi tháng = 1.000 × (0,50×0,2 + 0,35×1 + 0,15×3) = 900 phiên ở kịch bản cơ sở (tự ước tính).
+- Chi phí tháng tính riêng từng persona, không lấy 900 nhân thẳng với trung bình của mẫu 100 phiên. Chi phí/phiên của ba persona lần lượt khoảng $0,00013412, $0,00026747 và $0,00040206. Cơ sở = 1.000 × (0,50×0,2×0,00013412 + 0,35×1×0,00026747 + 0,15×3×0,00040206) ≈ $0,28795/tháng. Mẫu mô phỏng có 52/29/19 phiên, khác cơ cấu phiên khi nhân tần suất sử dụng hằng tháng; vì vậy chi phí/phiên trung bình mẫu $0,00022370 khác chi phí/phiên cơ sở $0,28795/900 ≈ $0,00031995. Đây là đúng phép tính của bộ chạy BTC, không phải lượt đo mới.
 - Đầu vào mô phỏng lấy ngẫu nhiên từ các câu loại `thuong` và `kho` của bộ thử (27 câu khác nhau). Token là số đo thật, nhưng nội dung không phải lưu lượng khách thật.
 
 ## 3. Phần việc vẫn cần nhân viên

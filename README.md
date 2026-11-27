@@ -82,6 +82,7 @@ Khung đo token từ API usage; không ước lượng. Lỗi kết nối đư�
 - [Canvas](canvas.md), [spec và kiến trúc](spec.md), [hồ sơ đánh giá](eval/README.md), [báo cáo đánh giá](eval/report.md), [chi phí](cost/cost-estimate.md).
 - [Thành viên và phần việc](TEAMS.md).
 - [Slide trình bày 8 trang](demo-slides.pdf), [bản HTML có ghi chú](slides/demo.html), [nghiệm thu và giới hạn](docs/final-review.md), [reflection từng thành viên](reflection/).
+- [Đối chiếu CP1–CP4](docs/final-review.md#đối-chiếu-bốn-checkpoint): đủ tệp không đồng nghĩa đã nộp form hoặc hoàn thành demo trực tiếp. [Cấu hình model hiện tại](docs/connect-model.md).
 - CP1 17:00 27/11; CP2 19:30 27/11; CP3 10:00 28/11; CP4 14:30 28/11; bản cuối 23:59 28/11 (GMT+7). Chuẩn đánh giá chốt CP2, giữ nguyên sau đó.
 - Nộp từng mốc bằng [Google Form checkpoint của BTC](https://docs.google.com/forms/d/e/1FAIpQLSdFqBLvf--GLbTUQ2vcFkkKDGsgT-LGT7oftBG_x8Pk-gMVwg/viewform). Dùng cùng tên đội, MSSV trưởng nhóm và repo cho cả bốn mốc. Tạo/push repo không đồng nghĩa đã nộp checkpoint.
 

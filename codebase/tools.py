@@ -44,23 +44,68 @@ def get_policy(issue):
     return None
 
 
+FOOD_SAFETY = r"\b(?:di ung|ngo doc|di vat|kho tho|sung moi|cap cuu)\b"
+# Từ phủ định đứng ngay trước dấu hiệu khẩn ("không bị dị ứng") thì không tính là khẩn.
+NEGATION = re.compile(r"\b(?:khong|ko|k|chua|cha|chang|hong)(?:\s+(?:he|co|bi|thay))*\s*$")
+PROMPT_INJECTION = (
+    r"bo qua (?:moi )?(?:chinh sach|huong dan|quy tac)|system prompt|\[\s*(?:system|he thong)"
+    r"|(?:lenh|ghi chu|thong bao|chi thi) (?:cua )?he thong|che do (?:kiem thu|test|debug|admin|nha phat trien|developer)"
+    r"|tu (?:dong )?duyet|\brm -|\bexec\(|khoa (?:quan|shop)|phat tai xe|chuyen tien that|tu hoan tien"
+    r"|(?:toi|em|minh|tao) la (?:quan ly|admin|quan tri|nhan vien (?:he thong|cskh|ho tro))"
+    r"|ignore (?:all |the )?(?:previous|system) instructions|developer mode")
+
+
 def safety_issue(text):
     text = normalize(text)
-    if re.search(r"di ung|ngo doc|di vat|kho tho|sung moi|cap cuu", text):
+    if any(not NEGATION.search(text[:m.start()]) for m in re.finditer(FOOD_SAFETY, text)):
         return "food_safety"
-    if re.search(r"so dien thoai|dia chi (?:cua )?(?:khach|tai xe|shipper|nguoi)|mat khau|\botp\b|so the|email cua", text):
+    if re.search(r"so dien thoai|\bsdt\b|dia chi (?:cua )?(?:khach|tai xe|shipper|nguoi)|mat khau|\botp\b|so the|email cua", text):
         return "privacy"
-    if re.search(r"bo qua (?:moi )?(?:chinh sach|huong dan|quy tac)|system prompt|lenh he thong|\brm -|\bexec\(|khoa (?:quan|shop)|phat tai xe|chuyen tien that|tu hoan tien|toi la quan ly|ignore (?:all |the )?(?:previous|system) instructions", text):
+    if re.search(PROMPT_INJECTION, text):
         return "out_of_scope"
     return None
 
 
-def item_aliases(item):
+GENERIC_WORDS = {'mau', 'mon', 'phan', 'suat', 'hop', 'ly', 'coc', 'chai', 'nuoc'}
+
+
+def item_aliases(item, order=None):
+    """Tên đầy đủ, tên bỏ chữ "mẫu", và chữ đầu của tên khi chữ đó chỉ có ở một món trong đơn
+    (vd "bún" cho "Bún bò" nếu đơn không có món bún khác)."""
     name = normalize(item['name'])
-    return [name, name.removesuffix(' mau')] if name.endswith(' mau') else [name]
+    aliases = [name, name.removesuffix(' mau')] if name.endswith(' mau') else [name]
+    first = name.split()[0]
+    if order and len(first) >= 3 and first not in GENERIC_WORDS and \
+            sum(normalize(other['name']).split()[0] == first for other in order['items']) == 1:
+        aliases.append(first)
+    return list(dict.fromkeys(aliases))
 
 
-QUANTITY_UNIT = r'(?:phan|suat|ly|coc|chai|mon|hop|cai)'
+def mentioned_items(text, order, item_ids):
+    """Giữ item_ids của model chỉ khi khách thật sự nhắc từng món (mã hoặc tên) và món có trong đơn.
+    Có món không khớp thì trả [] để hệ thống hỏi lại, không gán lời khách sang món khác."""
+    if not order or not item_ids:
+        return []
+    value = normalize(text)
+    lookup = {item['item_id']: item for item in order['items']}
+    for item_id in item_ids:
+        item = lookup.get(item_id)
+        if item is None:
+            return []
+        names = [item_id.lower(), *item_aliases(item, order)]
+        if not any(re.search(r'\b' + re.escape(name) + r'\b', value) for name in names):
+            return []
+    return list(dict.fromkeys(item_ids))
+
+
+QUANTITY_UNIT = r'(?:phan|suat|ly|coc|chai|mon|hop|cai|to|bat|dia|goi|lon|chiec|xien|banh)'
+NUMBER_WORDS = {'mot': 1, 'hai': 2, 'ba': 3, 'bon': 4, 'tu': 4, 'nam': 5, 'sau': 6,
+                'bay': 7, 'tam': 8, 'chin': 9, 'muoi': 10}
+NUMBER = r'(-?\d+|(?:' + '|'.join(NUMBER_WORDS) + r')(?=\s))'
+
+
+def to_number(token):
+    return NUMBER_WORDS[token] if token in NUMBER_WORDS else int(token)
 
 
 def affected_quantities(text, order, issue, item_ids):
@@ -73,10 +118,10 @@ def affected_quantities(text, order, issue, item_ids):
     for item in order['items']:
         if item['item_id'] not in item_ids:
             continue
-        names = '|'.join(re.escape(name) for name in [item['item_id'].lower(), *item_aliases(item)])
-        pattern = (r'\b' + cue + r'\s+(?:toan\s+bo\s+)?(-?\d+)\s*'
+        names = '|'.join(re.escape(name) for name in [item['item_id'].lower(), *item_aliases(item, order)])
+        pattern = (r'\b' + cue + r'\s+(?:toan\s+bo\s+)?' + NUMBER + r'\s*'
                    r'(?:' + QUANTITY_UNIT + r'\s+)?(?:' + names + r')\b')
-        found = {int(match) for match in re.findall(pattern, value)}
+        found = {to_number(match) for match in re.findall(pattern, value)}
         if found:
             quantities[item['item_id']] = next(iter(found)) if len(found) == 1 else None
     return quantities
@@ -100,9 +145,9 @@ def preview_classify(text, order=None):
             issue = 'payment'
     item_ids = list(dict.fromkeys(re.findall(r"\bI\d{2}\b", text.upper())))
     if not item_ids:
-        cue = r'\b(?:thieu|giao\s+sai|sai\s+mon|nham\s+mon)\s+(?:mon\s+)?(?:\d+\s+(?:' + QUANTITY_UNIT + r'\s+)?)?'
+        cue = r'\b(?:thieu|giao\s+sai|sai\s+mon|nham\s+mon)\s+(?:mon\s+)?(?:' + NUMBER + r'\s+)?(?:' + QUANTITY_UNIT + r'\s+)?'
         for item in order['items'] if order else []:
-            if any(re.search(cue + re.escape(name) + r'\b', value) for name in item_aliases(item)):
+            if any(re.search(cue + re.escape(name) + r'\b', value) for name in item_aliases(item, order)):
                 item_ids.append(item['item_id'])
     return {"issue": issue, "item_ids": item_ids}
 

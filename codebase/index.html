@@ -304,6 +304,12 @@ function renderAnswer(r){
 
 function renderTech(payload){
   const r=payload.result,u=payload.usage||{};
+  if(r.mode==='guard'){
+    $('tech').textContent='Lượt gần nhất: model API lỗi ('+(r.api_error||'không rõ')+'). Phản hồi an toàn do code tạo, không phải AI · căn cứ '+r.citations.join(', ');
+    $('json').textContent=JSON.stringify(payload,null,2);
+    setMode('err','Bản demo · API lỗi','phản hồi khẩn do code tạo, không phải AI. Kiểm mạng/credit rồi thử lại.');
+    return;
+  }
   $('tech').textContent='Lượt gần nhất: '+(r.mode==='preview'?'mô phỏng bằng quy tắc':'AI')+' · model '+(r.model||'—')+' · gọi model '+(u.model_calls??0)+' lần · token vào '+(u.tokens_in??0)+' / ra '+(u.tokens_out??0)+' · căn cứ '+r.citations.join(', ')+' · quyết định '+r.decision;
   $('json').textContent=JSON.stringify(payload,null,2);
   if(r.mode==='ai'&&u.tokens_in>0)setMode('live','Bản demo · AI thật','model '+r.model+' trả lời, token đo từ API (vào '+u.tokens_in+' / ra '+u.tokens_out+'). Đề xuất vẫn chờ nhân viên duyệt.');

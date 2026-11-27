@@ -1,19 +1,14 @@
 # Khai báo dùng AI
 
-README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt buộc). Ghi chi tiết vào bảng dưới đây.
+AI hỗ trợ chuẩn bị sản phẩm, dữ liệu và hồ sơ. Mọi kết quả review truy được nguồn; dữ liệu giả lập ghi seed. Theo yêu cầu người dùng, chưa gọi API. Không có phỏng vấn/khảo sát/người dùng thử hoặc người chấm độc lập được ghi là đã làm.
 
-> Luật của đề: dùng AI để làm bài thoải mái, nhưng **ai không giải thích được phần có tên mình thì phần đó nhận 0 điểm**. Khai thiếu không bị trừ; giấu mới bị.
-
-| Việc | Công cụ AI | AI làm gì | Người kiểm/sửa gì | Ai phụ trách |
+| Việc | Công cụ AI | Nội dung hỗ trợ | Kiểm tra và giới hạn | Người phụ trách |
 |---|---|---|---|---|
-| Khởi tạo repo và thông tin nhóm | Codex | Đối chiếu bộ đề; tạo repo Public; chuẩn bị starter, TEAMS và Canvas dự kiến | Quang cung cấp tên nhóm, họ tên/MSSV và xác nhận đội trưởng; chưa có đánh giá code bởi thành viên | Trần Văn Quang |
-| Code bản chạy thử | | | | |
-| Prompt / thiết kế lời gọi mô hình | | | | |
-| Đào data (viết script đếm, gợi ý nhãn) | | | Kiểm tay __ dòng, khớp __ | |
-| Rà câu hỏi phỏng vấn / khảo sát | | Chỉ rà câu dẫn dắt | | |
-| Viết câu thử (benchmark) | | | Mỗi câu thử có `source`; câu thử AI viết được ghi rõ | |
-| Sinh data `synthetic` (nếu có) | | | Seed __ · kiểm tay __ dòng | |
-| Chấm cột `pass` bằng LLM (nếu có) | | | Kiểm tra thủ công __ câu thử, khớp __/__ | |
-| Slide, văn bản | | | | |
+| Repo và thành viên | Codex | Đọc đề, chuẩn bị starter và TEAMS | Quang cung cấp tên/MSSV, xác nhận đội trưởng; kiểm máy đúng format | Quang điều phối; chưa chia phần |
+| Bằng chứng | Codex | Viết script lấy 150 review, định nghĩa nhãn và đếm | Trích hai câu, bỏ tác giả; đọc ví dụ và rà regex; chưa hai người gắn nhãn độc lập | Chưa phân công |
+| Dữ liệu giả lập | Codex | Sinh 50 đơn/10 chính sách | seed 20261127, cờ synthetic, không chính sách hãng thật | Chưa phân công |
+| Code và giao diện | Codex | Workflow, adapter API, tiền/rủi ro, web local | Unit/HTTP/UI offline; API thật chưa thử | Chưa phân công |
+| Bộ câu thử | Codex | 30 câu và tiêu chí chấm có cấu trúc | 12 diễn đạt lại từ tình huống review, 18 tự viết; không giả làm lời phỏng vấn | Chưa phân công |
+| Hồ sơ và chi phí | Codex | Tổng hợp số đếm, cấu hình persona và giá | Chưa có token/accuracy/cost thật; giả định quy mô/tần suất ghi rõ tự ước tính | Chưa phân công |
 
-**Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).
+Không bịa người, câu trả lời, nguồn, kết quả eval hoặc token. Không sửa output/expected/trace để khớp nhau. Thành viên phải đọc, kiểm lại và giải thích phần thực tế mình nhận trước khi ghi reflection.

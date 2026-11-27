@@ -1,23 +1,14 @@
-# Dàn slide → lấy số từ file nào
+# Khung trình bày 8 trang — AI1
 
-> Làm ở guide bước 5.1. Luật: **không có bằng chứng thì không có slide** — mỗi trang ≥1 con số / trích dẫn có nguồn / kết quả đo.
-> Xuất PDF thành `demo-slides.pdf` ở thư mục gốc repo, nộp tại CP4 14:30 Thứ Bảy 28/11. Định dạng nào cũng được (PDF, PPTX, HTML…); hoặc nộp link slide (Drive, Canva, Google Slides…) ở form CP4, để ai có link cũng xem được.
+Đây là **dàn ý**, chưa phải file slide hoàn chỉnh. Chưa gọi API, không có số đo AI để điền trang 5/6.
 
-| # | Trang | Có gì | Số lấy từ | Xong |
-|---|---|---|---|---|
-| 1 | Người dùng & pain | Ai · việc gì · chỗ đau + số và trích dẫn | `evidence/summary.md` | ☐ |
-| 2 | Vì sao chọn bài này | Bảng impact rút gọn + hướng bị loại | `spec.md` §2 | ☐ |
-| 3 | Giải pháp | Lát cắt một câu · sơ đồ · AI tự làm đến đâu, vì sao | `spec.md` §4 | ☐ |
-| 4 | Demo live | 1 trường hợp thường + 1 trường hợp khó (lấy từ bộ câu thử); mạng hỏng → video dự phòng | `eval/benchmark.csv` | ☐ |
-| 5 | **Đánh giá thế nào** | Dataset · bộ câu thử · metric · lượt 1 → lượt 2 so với chuẩn "đạt" (kèm run ID) · lỗi chính | `eval/README.md`, `eval/report.md` | ☐ |
-| 6 | **Chi phí khi dùng thật** | Chi phí / task thành công · 3 kịch bản · so với impact | `cost/cost-estimate.md` | ☐ |
-| 7 | Kết luận | Go / iterate / stop — dẫn số ở trang 1, 5, 6 | — | ☐ |
-| 8 | Nếu có thêm 1 tuần | 2–3 việc, trỏ về lỗi còn lại / phản hồi người dùng | `eval/report.md` mục 4 · `validation/log.md` | ☐ |
+1. **Người dùng & pain:** khách có đơn đồ ăn gặp sự cố; 18/150 review nhắc hỗ trợ/hoàn tiền, 11/150 có ngữ cảnh đồ ăn; một trích dẫn nguyên văn và nguồn từ evidence/data-mining.md.
+2. **Vì sao chọn:** ba hướng trong spec §2; chọn khiếu nại vì phạm vi và điều kiện kiểm rõ. Impact 4.500 phút/tháng là giả định, chưa đo.
+3. **Giải pháp:** sơ đồ một workflow, một lời gọi model; đơn/policy giả lập; tiền bằng code, người duyệt.
+4. **Demo:** FD001 giao trễ; FD007 thiếu món; yêu cầu ép bỏ chính sách. Ghi rõ mode preview hiện tại; trước CP3 cần AI thật/video thật.
+5. **Đánh giá thế nào:** 30 câu, 12 nguồn tình huống review, 3 metric. Chưa có lượt 1→2; chỉ điền khi đã chạy thật.
+6. **Chi phí:** chuẩn bị 100 phiên, 3 persona, 3 kịch bản và hai mức giá. Chưa có token/cost-task thành công.
+7. **Kết luận:** hiện ở trạng thái iterate/chưa đánh giá AI. Không khẳng định go hoặc tiết kiệm thật.
+8. **Một tuần tiếp:** kiểm với khách thật, chấm độc lập, quản lý phiên nhiều lượt, xác minh bằng chứng thay cờ ảnh.
 
-**Trước khi lên:** tải repo về một máy khác (hoặc thư mục mới), chạy theo mục "Chạy trong 3 phút" của `README.md` · `.env` có trên máy demo, đã gọi thử 1 câu trong vòng 1 giờ trước giờ demo · video dự phòng mở được bằng cửa sổ ẩn danh · biết bản chạy thử sẽ làm gì với **1 câu thử lạ** của giám khảo.
-
-Ai nói trang nào (mỗi người ≥1 phần):
-
-| Trang | Người nói |
-|---|---|
-| | |
+Chưa chia người nói trang nào. Chưa có video 30 giây hoặc video dự phòng.

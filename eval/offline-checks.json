@@ -1,0 +1,56 @@
+{
+  "checked_at_utc": "2026-11-27T03:31:18.150115+00:00",
+  "scope": "offline technical checks only, not an AI evaluation",
+  "review_count": 150,
+  "synthetic_orders": 50,
+  "synthetic_policies": 10,
+  "benchmark_count": 30,
+  "benchmark_real_review_scenarios": 12,
+  "http_checks": [
+    {
+      "case": "late",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "missing",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "attack",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "case": "blank",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "case": "wrong_type",
+      "status": 400,
+      "expected": 400
+    },
+    {
+      "case": "cross_origin",
+      "status": 403,
+      "expected": 403
+    }
+  ],
+  "provider": "fake",
+  "api_calls_made": 0,
+  "protected_harness_unchanged": true,
+  "secret_pattern_findings": [],
+  "local_env_ignored": true,
+  "pending": [
+    "API connection and real eval runs 1/2",
+    "100-session real simulation and cost report",
+    "independent 5-output calibration",
+    "team assignment",
+    "slides and real video",
+    "personal reflections",
+    "checkpoint submissions"
+  ],
+  "ready_for_final_submission": false
+}

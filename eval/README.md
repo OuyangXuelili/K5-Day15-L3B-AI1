@@ -1,44 +1,44 @@
-# Hồ sơ đánh giá — một trang
+# Hồ sơ đánh giá
 
-> Điền ở guide bước 2.4 (mục 1–4, trước CP2) và 4.1 (mục 5–6, trước CP4). Ôn lại: ngày 9, ngày 14 · lab ngày 9. Chấm ở rubric R4, R5.
-> Người ngoài nhóm đọc trang này phải hiểu được: nhóm đo cái gì, bằng gì, ra số nào. Trang slide "Đánh giá thế nào" lấy từ đây.
+## 1. Dataset và độ phủ
 
-## 1. Dataset → xử lý
+150 review → nhãn và ví dụ có nguồn; 50 đơn + 10 chính sách giả lập → 30 câu kiểm được. Xem `data/DATA_CARD.md`.
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+- 18 `thuong`, 8 `kho`, 4 `tu_choi` (gồm tấn công bỏ chính sách, lộ thông tin, giả danh quản lý, chạy lệnh).
+- 12/30 (40%) tình huống có nguồn `data_that`, diễn đạt lại từ review; 18/30 tự viết. Không có phỏng vấn giả.
+- Các chiều input: loại sự cố × trạng thái đơn × điều kiện trễ/ảnh/món × yêu cầu trong/ngoài quyền.
+- Nguồn sự thật: D19/D20/D22; mơ hồ: D21/D23/D24; ngoài quyền: D27–D30; rủi ro lĩnh vực: D25/D26 và các ca thanh toán.
 
-## 2. Bộ câu thử dựng ra sao
+## 2. Metric và chuẩn đề xuất
 
-- `eval/benchmark.csv`: __ câu (thuong __ · kho __ · tu_choi __, trong đó __ câu tấn công)
-- Nguồn (`python run.py check` in sẵn): nguoi_dung __ · data_that __ · tu_viet __ · sinh_seed __ → từ người dùng / data thật __/__ (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+`metric_spec.yaml` có 3 metric: đúng quyết định ≥85% tổng và 100% từ chối; đúng tiền/không thực hiện giao dịch 100%; nguồn hợp lệ 100%. Chuẩn đề xuất phải được nhóm rà trước CP2; không sửa sau CP2. Script chấm `grade.py` chỉ sửa hai cột `pass`, `ghi_chu`, không sửa output, token hoặc expected.
 
-## 3. Metric và cách chấm
+## 3. Kiểm chấm độc lập
 
-| Metric (`eval/metric_spec.yaml`) | Cách chấm | Ngưỡng |
+**Chưa thực hiện.** Chưa có 5 output AI thật để hai thành viên chấm độc lập. Sau lượt 1, chọn 5 câu gồm bình thường, ngưỡng 30 phút, thiếu thông tin, tiền và tấn công; hai người tự chấm rồi ghi số khớp/5. Không coi công cụ tự kiểm là người chấm thứ hai.
+
+## 4. Lệnh sau khi được phép chạy API
+
+```bash
+python run.py check
+python run.py eval --try
+python run.py eval
+python eval/grade.py eval/run-1.csv
+python run.py score eval/run-1.csv
+# Đọc lỗi thật, chốt một cải tiến; giữ nguyên bộ thử và metric.
+python run.py eval
+python eval/grade.py eval/run-2.csv
+python run.py score eval/run-2.csv
+```
+
+## 5. Các lượt đã chạy
+
+| Loại kiểm tra | Model/token | Trạng thái |
 |---|---|---|
-| | code / llm / nguoi | |
-| | | |
-| | | |
+| Kiểm hợp đồng offline | fake, token 0 | `python eval/test_contracts.py`: kiểm nhánh xử lý, giới hạn tiền và 30 fixture; đây không phải accuracy AI |
+| Eval AI lượt 1 | Chưa gọi | Chưa có run ID, output, token hoặc % đạt AI |
+| Eval AI lượt 2 | Chưa gọi | Chờ lượt 1 và cải tiến dựa trên lỗi |
 
-- **Người thứ hai chấm thử:** __ (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
-- LLM chấm (nếu có): đã kiểm tay __ câu, khớp __/__
-- **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "__"
+## 6. Giới hạn
 
-## 4. Lệnh
-
-`python run.py eval` → `eval/run-N.csv` + `traces/run-N.jsonl` · điền cột `pass` · `python run.py score eval/run-N.csv`
-
-## 5. Đã chạy gì
-
-| Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
-|---|---|---|---|---|---|---|
-| 1 | | | | __/__ | | |
-| 2 | | | | __/__ | | |
-
-Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
-
-## 6. Lỗi chính
-
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+Chấm code kiểm hành vi có cấu trúc, không chấm chất lượng ngôn ngữ hay xác minh món thiếu thật từ ảnh. Code hiện chỉ đọc cờ ảnh giả lập. Không có đánh giá AI thật, semantic judge, đánh giá người dùng hoặc held-out. Báo cáo R5 chưa hoàn thành.

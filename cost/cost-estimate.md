@@ -1,38 +1,25 @@
-# Chi phí khi dùng thật
+# Chi phí khi dùng thật — chưa có số đo API
 
-> Điền ở guide bước 4.2, nộp ở CP4 14:30 Thứ Bảy 28/11. Ôn lại: ngày 13, ngày 1, ngày 14 · lab ngày 13, lab ngày 14. Chấm ở rubric R6.
-> Số **không điền tay**: điền `cost/personas.yaml` → `python run.py simulate` → chép bảng trong `cost/simulate-N-summary.md` vào đây.
-> Lúc build dùng gói miễn phí vẫn tính theo **giá gói trả phí** — đây là chi phí cho lúc đưa vào dùng thật.
+**Trạng thái:** chưa chạy API hoặc mô phỏng token theo yêu cầu người dùng. `cost/personas.yaml` đã chuẩn bị 100 phiên, seed 20261127, ba persona, ba kịch bản 300/1.000/5.000 người. Mọi tần suất và quy mô đều ghi rõ tự ước tính, không phải thống kê từ review.
 
-## 1. Đầu vào
+Giá theo bảng chung BTC ngày 25/11/2026: gpt-4o-mini input/output 0,15/0,60 USD trên 1M token; gpt-5-mini 0,25/2,00 USD trên 1M token. [Bảng BTC](https://github.com/VinUni-AI20k/K5-L3-Day15-AI-Product-Hackathon/blob/main/further-reading/model-prices.md), [nguồn giá](https://developers.openai.com/api/docs/pricing). Đây là giá để mô phỏng, chưa phải chi phí đã thanh toán.
 
-- **Persona** (`cost/personas.yaml`): ≥3 kiểu — tỉ lệ, số phiên / người / tháng, số lượt hỏi / phiên. Nguồn: __
-- **Số người dùng thật** 3 kịch bản: thấp __ · cơ sở __ · cao __. Nguồn: __
-- **Giá** ≥2 mức model (từ `further-reading/model-prices.md` của repo đề, có link + ngày xem): __ · __
-- **Tỉ lệ đạt** dùng để tính: __/__ (__%) — lượt `run-__` (lượt 2)
-- Đo token trên model __, tính giá model __ và __
+## Lệnh khi có lượt 2 đã chấm và cùng model
 
-## 2. Kết quả mô phỏng
+```bash
+python run.py simulate --try
+python run.py simulate --rate-from eval/run-2.csv
+```
 
-Lượt mô phỏng: `cost/simulate-__.csv` · run ID __ · __ phiên · seed __
+Lấy token API từ trace của phiên; không quy đổi số chữ. Chép bảng thật từ `simulate-N-summary.md`, ghi rõ đo token trên model nào và tính giá model nào. Lượt của model khác không chứng minh tỷ lệ đạt của model đó.
 
-*(dán bảng từ `cost/simulate-N-summary.md`)*
+| Chỉ số | Trạng thái |
+|---|---|
+| Token vào/ra và cost/phiên | Chưa đo |
+| Tỷ lệ đạt lượt 2 | Chưa đo |
+| Cost/task thành công | Chưa tính; không lấy tỷ lệ đạt 100% |
+| Cost/tháng ba kịch bản, hai mức model | Chưa tính |
 
-| Model | Chi phí / phiên | Chi phí / task thành công | / tháng — thấp | / tháng — cơ sở | / tháng — cao | / người / tháng (cơ sở) |
-|---|---|---|---|---|---|---|
-| | | | | | | |
-| | | | | | | |
+Cost/task thành công = cost/phiên ÷ tỷ lệ đạt thật. Khi tỷ lệ đạt bằng 0 thì không có chi phí hữu hạn cho task thành công. Tần suất bình quân dự kiến = 0,50×0,2 + 0,35×1 + 0,15×3 = 0,9 phiên/người/tháng. Nếu tiết kiệm 5 phút/phiên (tự ước tính), impact tiềm năng = 4,5 phút/người/tháng; chưa đo tiết kiệm thật nên chưa kết luận ROI/go.
 
-Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt — **không coi như đạt 100%**.
-
-## 3. So với impact
-
-- Impact / người / tháng (`spec.md` §2): __
-- Chi phí / người / tháng (cơ sở, model __): __
-- **Kết luận một dòng — đáng làm không:** __
-
-## 4. *(Muốn sâu hơn, không bắt buộc)*
-
-- Bảng độ nhạy: model rẻ hơn · cache · cắt ngữ cảnh · giới hạn bước — mỗi cần gạt đổi chi phí bao nhiêu
-- Chi phí ngoài model: hosting, lưu trữ, giờ công người duyệt
-- Quy mô nào thì bài toán còn đáng làm
+Mô phỏng hiện lấy input độc lập mỗi lượt, chưa quản lý hội thoại nhiều lượt cùng session. Hosting local = không mua dịch vụ cloud trong bước này, nhưng giờ công người duyệt chưa được tính.

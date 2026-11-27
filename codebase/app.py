@@ -1,9 +1,7 @@
-"""Khung chạy bản chạy thử tối thiểu (dòng lệnh): gõ đầu vào → answer() trong agent.py → in kết quả.
+"""Chạy web demo local bằng python run.py.
 
-Chạy bằng: python run.py   (macOS/Linux có thể là python3, Windows có thể là py)
-Nhóm thay bằng giao diện của mình (web, bot…) nhưng giữ `python run.py` là lệnh duy nhất
-để chạy bản chạy thử (sửa hàm run_app() trong run.py nếu cần).
-"""
+APP_MODE=cli giữ cách nhập câu hỏi trên terminal; mặc định web.
+Không thay bộ chạy run.py hoặc hợp đồng answer() của starter."""
 import os
 import sys
 
@@ -66,4 +64,9 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    from ai import load_env
+    load_env()
+    if os.environ.get("APP_MODE", "web") == "cli":
+        sys.exit(main())
+    from web import main as web_main
+    web_main()

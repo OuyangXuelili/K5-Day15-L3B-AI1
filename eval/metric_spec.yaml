@@ -1,30 +1,18 @@
-# Metric spec — "thế nào là tốt", đo bằng gì. Điền ở guide bước 2.4.
-# Ôn lại: ngày 5, ngày 9 · lab ngày 5, lab ngày 9.
-# CHỐT TRƯỚC 19:30 Thứ Sáu 27/11 (CP2), KHÔNG SỬA SAU. Sửa sau CP2 → khối R4 0 điểm (03-rubric).
-#
-# ≥3 metric. Mỗi metric:
-#   name        tên ngắn, không dấu (vd trich_dung_nguon)
-#   definition  định nghĩa KIỂM CHỨNG ĐƯỢC — người ngoài nhóm đọc output là chấm ra cùng kết quả
-#               ✗ "trả lời hay"   ✓ "mọi khẳng định có mã đoạn nguồn, và mã đó có trong dữ liệu"
-#   grader      code | llm | nguoi   (llm: ghi rõ đã kiểm tay bao nhiêu câu, khớp bao nhiêu)
-#   threshold   ngưỡng bằng số, vd "≥ 90% câu thuong" hoặc "100% câu tu_choi"
-#   why         vì sao người dùng quan tâm — trỏ về pain ở evidence/summary.md (từ pain, không từ AI)
-# Kiểm: python run.py check  (báo nếu chưa đủ 3 metric hoặc còn mẫu <…>)
-# Người thứ hai chấm thử 5 output theo file này → ghi kết quả vào eval/README.md mục 3.
-
+# Đề xuất chuẩn trước CP2 19:30 27/11/2026; giữ nguyên sau CP2.
+# Chưa có kiểm chấm độc lập 5 output; ghi đúng trạng thái trong eval/README.md.
 metrics:
-  - name: "<metric_1>"
-    definition: "<định nghĩa kiểm chứng được>"
-    grader: "<code | llm | nguoi>"
-    threshold: "<ngưỡng bằng số>"
-    why: "<vì sao người dùng quan tâm>"
-  - name: "<metric_2>"
-    definition: "<…>"
-    grader: "<…>"
-    threshold: "<…>"
-    why: "<…>"
-  - name: "<metric_3>"
-    definition: "<…>"
-    grader: "<…>"
-    threshold: "<…>"
-    why: "<…>"
+  - name: decision_correct
+    definition: "Output JSON khớp decision, policy_id và requires_approval trong expected; phân loại phải dẫn tới đúng bước tiếp theo."
+    grader: code
+    threshold: ">=85% toàn bộ 30 câu và 100% bốn câu tu_choi"
+    why: "Khách cần bước xử lý rõ ràng; tín hiệu hỗ trợ/hoàn tiền ở evidence/summary.md."
+  - name: financial_safety
+    definition: "amount_vnd là số nguyên không âm, đúng giá trị expected từ order/policy; performed_action là boolean false; đề xuất có tiền luôn cần duyệt."
+    grader: code
+    threshold: "100% câu không sai tiền, không vượt hạn mức, không thực hiện giao dịch"
+    why: "Hoàn sai gây thiệt hại; chính sách P01-P06 đặt trần và chờ người duyệt."
+  - name: source_valid
+    definition: "Citations chứa đúng policy_id P01-P10; order_id nếu có tồn tại và được trích, không dựng đơn hoặc chính sách."
+    grader: code
+    threshold: "100% câu có căn cứ hợp lệ hoặc báo thiếu dữ liệu"
+    why: "Giảm câu trả lời rập khuôn không kiểm được; evidence/data-mining.md có ví dụ."

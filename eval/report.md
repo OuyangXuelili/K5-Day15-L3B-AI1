@@ -1,42 +1,21 @@
-# Báo cáo đánh giá — lượt 1 → một cải tiến → lượt 2
+# Báo cáo đánh giá — trạng thái chuẩn bị
 
-> Điền ở guide bước 4.1. Lượt 1 trước **CP3 10:00 Thứ Bảy 28/11**, lượt 2 trước **CP4 14:30 Thứ Bảy 28/11**, cùng bộ câu thử, cùng cách chấm. Chấm ở rubric R5.
-> Số lấy từ `python run.py score eval/run-1.csv` (và `run-2.csv`) sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
-> Không được: sửa chuẩn "đạt", bỏ câu thử trượt, sửa `expected` cho khớp output, sửa kết quả lượt đã chạy.
+Theo yêu cầu của người dùng: **chưa gọi API**. Chưa có lượt 1/lượt 2, accuracy AI, số token hoặc chi phí đo. Không thay các phần này bằng kết quả preview.
 
-## 1. Kết quả
+| Lượt | Run ID | Model | Đạt/tổng | Trạng thái |
+|---|---|---|---|---|
+| 1 | Chưa có | Chưa gọi | Chưa đo | Chờ cho phép chạy API |
+| 2 | Chưa có | Chưa gọi | Chưa đo | Chờ đọc lỗi lượt 1 và một cải tiến |
 
-| Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
-|---|---|---|---|---|---|---|---|
-| 1 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
-| 2 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
+## Việc phải bổ sung bằng kết quả thật
 
-Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
+1. Lưu `run-1.csv`, chấm theo metric, giữ nguyên output/token/trace.
+2. Phân tích ít nhất 3 lỗi thật: input, output, nguyên nhân và nhóm lỗi. Nếu chưa quan sát được đủ lỗi thì ghi thiếu, không tạo lỗi giả hoặc cố ý làm hỏng baseline.
+3. Chọn một nhóm lỗi quan trọng, cải tiến code/prompt, chạy cùng 30 câu thành `run-2.csv`, báo cả regression.
+4. Hai người chấm độc lập 5 output, ghi độ khớp trong `eval/README.md`.
 
-## 2. Lỗi lượt 1 — gom thành nhóm có tên
+## Lỗi kỹ thuật đã tìm và sửa khi chuẩn bị
 
-| Nhóm lỗi | Số câu | Câu |
-|---|---|---|
-| vd: bịa nguồn *(ví dụ)* | | |
-| vd: đoán khi thiếu thông tin *(ví dụ)* | | |
-| | | |
-
-**≥3 lỗi cụ thể:**
-
-| Câu | Input | Output | Vì sao sai |
-|---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
-
-## 3. Một lần cải tiến
-
-- Nhắm vào nhóm lỗi: __ — vì sao là nhóm **đau nhất với người dùng**: __
-- Đã sửa gì (có thể vài thay đổi cùng nhắm nhóm lỗi đó): __
-- Kết quả: nhóm lỗi đó __/__ → __/__ · tổng __% → __%
-- Câu nào **tệ đi** sau khi sửa: __
-
-## 4. Còn lại
-
-- Lỗi chưa sửa + nguy hiểm thế nào: __
-- Nếu có thêm 1 tuần: __
+- Regex preview từng khớp `huye` bên trong `chuyen`, khiến câu mơ hồ bị phân loại hủy đơn; đã bổ sung ranh giới từ. Đây là lỗi preview offline, không nhận là lỗi eval AI.
+- Script thu review ban đầu ghi file thành công nhưng in đường dẫn Unicode lỗi trên console Windows; đã đặt output UTF-8. Không mất hoặc thay số đo.
+- Regex sàng lọc review ban đầu khớp chuỗi con; đã sửa ranh giới trước khi chốt bản số liệu hiện tại.

@@ -1,0 +1,35 @@
+[
+  {
+    "file": "soup.jpg",
+    "title": "File:Canhchua2.jpg",
+    "author": "Jason Hutchens",
+    "source": "https://commons.wikimedia.org/wiki/File:Canhchua2.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/Canhchua2.jpg/330px-Canhchua2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "CC BY 2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0",
+    "modifications": "Thumbnail resized by Wikimedia; displayed with a square crop.",
+    "bytes": 28704
+  },
+  {
+    "file": "rice.jpg",
+    "title": "File:Cơm gà kiểu Việt Nam (cơm chiên gà rán) eHy tháng 6 năm 2018.jpg",
+    "author": "Phương Huy",
+    "source": "https://commons.wikimedia.org/wiki/File:C%C6%A1m_g%C3%A0_ki%E1%BB%83u_Vi%E1%BB%87t_Nam_(c%C6%A1m_chi%C3%AAn_g%C3%A0_r%C3%A1n)_eHy_th%C3%A1ng_6_n%C4%83m_2018.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9e/C%C6%A1m_g%C3%A0_ki%E1%BB%83u_Vi%E1%BB%87t_Nam_%28c%C6%A1m_chi%C3%AAn_g%C3%A0_r%C3%A1n%29_eHy_th%C3%A1ng_6_n%C4%83m_2018.jpg/330px-C%C6%A1m_g%C3%A0_ki%E1%BB%83u_Vi%E1%BB%87t_Nam_%28c%C6%A1m_chi%C3%AAn_g%C3%A0_r%C3%A1n%29_eHy_th%C3%A1ng_6_n%C4%83m_2018.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "modifications": "Thumbnail resized by Wikimedia; displayed with a square crop.",
+    "bytes": 25717
+  },
+  {
+    "file": "tea.jpg",
+    "title": "File:Iced Tea.jpg",
+    "author": "Markus Spiske",
+    "source": "https://commons.wikimedia.org/wiki/File:Iced_Tea.jpg",
+    "download_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Iced_Tea.jpg/330px-Iced_Tea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "modifications": "Thumbnail resized by Wikimedia; displayed with a square crop.",
+    "bytes": 12368
+  }
+]

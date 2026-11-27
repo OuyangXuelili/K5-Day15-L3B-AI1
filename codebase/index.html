@@ -5,7 +5,7 @@
 <title>Hỗ trợ đơn hàng — AI1</title>
 <style>
 :root{
-  --bg:#f2f3f5;--card:#fff;--ink:#1e252b;--muted:#5b656e;--faint:#8b949c;--line:#dcdfe3;--line2:#eceef0;
+  --bg:#f4f6f6;--card:#fff;--ink:#1e252b;--muted:#5b656e;--faint:#687680;--line:#dcdfe3;--line2:#eceef0;
   --accent:#0f6670;--accent-dark:#0b4f57;--accent-soft:#e5f1f2;
   --ok:#1d6b3b;--ok-bg:#e9f5ed;--warn:#8a5200;--warn-bg:#fff5e3;--bad:#a12a2a;--bad-bg:#fdeeee;
   --font:"Segoe UI",Tahoma,Arial,sans-serif;
@@ -53,23 +53,33 @@ header.app .meta{color:var(--muted);font-size:13.5px;margin-left:auto}
 /* Ba cột */
 main{padding-top:18px;padding-bottom:20px}
 .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
-.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:6px}
+.card{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:8px;box-shadow:0 2px 5px #172e3405}
 .card > h2{font-size:16px;padding:14px 18px 12px;border-bottom:1px solid var(--line2);display:flex;align-items:center;gap:8px}
 .card .in{padding:14px 18px 18px}
 .step{display:inline-grid;place-items:center;width:22px;height:22px;background:var(--accent);color:white;font-size:12.5px;border-radius:3px;flex:none}
 
 /* Cột 1: đơn */
-#code{width:100%;padding:8px 11px;border:1px solid #c3c9cf;border-radius:4px}
+.field-label{display:block;margin:0 0 6px;font-size:14px;font-weight:600}
+#code{width:100%;padding:9px 11px;border:1px solid #bac5c9;border-radius:5px;min-height:44px}
 #code:not(:placeholder-shown){text-transform:uppercase}
 .receipt{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
 .receipt-head strong{font-weight:600;display:block}
+.receipt-head strong{margin-bottom:5px}
 .status{font-size:13.5px;color:var(--muted)}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:4px;background:var(--ok-bg);color:var(--ok);font-weight:600}
+.status-badge.w{background:var(--warn-bg)}.status-badge.b{background:var(--bad-bg)}
 .status .w{color:var(--warn)}.status .b{color:var(--bad)}
 table.items{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;margin-top:8px}
-.items td{padding:4px 0;vertical-align:top}
+.items td{padding:10px 0;vertical-align:middle}
+.items tbody tr+tr td{border-top:1px solid var(--line2)}
+.menu-item{display:flex;align-items:center;gap:10px;min-width:0;padding-right:10px}
+.food-thumb{width:52px;height:52px;flex:0 0 52px;border-radius:7px;object-fit:cover;background:#f0eee7;border:1px solid #e8e8e1}
+.item-name{display:block;font-weight:500;line-height:1.35}
+.image-note{font-size:11.5px;color:var(--muted);margin:3px 0 10px}
 .items .r{text-align:right;white-space:nowrap}
 .items .q{color:var(--muted);width:30px}
-.items .u{display:block;color:var(--faint);font-size:12.5px}
+.items .u{display:block;color:var(--faint);font-size:12px;margin-top:4px}
+.items tfoot{font-size:13.5px}
 .items tfoot td{border-top:1px solid var(--line2);padding-top:5px}
 .items tfoot tr:last-child td{font-weight:600}
 .notfound{margin-top:12px;padding:10px 12px;background:var(--warn-bg);color:var(--warn);border-radius:4px;font-size:14px}
@@ -78,8 +88,8 @@ table.items{width:100%;border-collapse:collapse;font-size:14px;font-variant-nume
 .about-order{margin:0 0 12px;padding:8px 10px;background:#f6f8f9;border-radius:4px;font-size:13.5px;color:var(--muted)}
 .about-order b{color:var(--ink);font-weight:600}
 .issues{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
-.issues button{border:1px solid #c3c9cf;background:white;border-radius:4px;padding:7px 10px;font-size:14px;text-align:left}
-.issues button:hover{border-color:var(--accent);color:var(--accent)}
+.issues button{border:1px solid #c3c9cf;background:white;border-radius:5px;padding:8px 10px;font-size:14px;text-align:left;min-height:44px;transition:background .15s,border-color .15s}
+.issues button:hover,.issues button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
 textarea{width:100%;min-height:130px;resize:vertical;padding:9px 11px;border:1px solid #c3c9cf;border-radius:4px}
 .hint{font-size:13px;color:var(--muted);margin:6px 0 0}
 .send{display:block;width:100%;margin-top:14px;padding:10px;background:var(--accent);color:white;border:0;border-radius:4px;font-weight:600;font-size:16px;min-height:46px}
@@ -106,10 +116,15 @@ textarea{width:100%;min-height:130px;resize:vertical;padding:9px 11px;border:1px
 .basis{margin-top:14px;padding-top:10px;border-top:1px solid var(--line2);font-size:13.5px;color:var(--muted)}
 .basis b{color:var(--ink);font-weight:600}
 .again{margin-top:12px;background:none;border:1px solid #c3c9cf;border-radius:4px;padding:6px 12px;font-size:14px}
-.busy{opacity:.5}
+.busy{opacity:.65}
+.loading-status{padding:12px 14px;margin:0 0 12px;border-radius:5px;background:var(--accent-soft);color:var(--accent);font-size:14px}
+.loading-status[hidden]{display:none}
+.empty-art{width:44px;height:44px;margin:2px 0 12px;color:var(--accent)}
 
 footer{padding:0 0 24px;font-size:12.5px;color:var(--muted)}
 footer p{margin:0 0 3px}
+footer a{color:var(--accent);text-underline-offset:3px}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* Màn hình vừa: 2 cột (đơn | sự cố + phản hồi) */
@@ -149,7 +164,7 @@ footer p{margin:0 0 3px}
     <span class="logo-text"><b>AI1</b><small>Nhóm AI1 · L3B</small></span>
   </a>
   <span class="divider" aria-hidden="true"></span>
-  <h1>Hỗ trợ đơn hàng</h1><span class="meta">Quán Mẫu · dữ liệu giả lập</span>
+  <h1>Hỗ trợ đơn hàng</h1><span class="meta">Hỗ trợ sau giao hàng</span>
 </div></header>
 
 <main class="wrap">
@@ -159,7 +174,7 @@ footer p{margin:0 0 3px}
   <section class="card col-order" aria-labelledby="s1">
     <h2 id="s1"><span class="step">1</span>Đơn của bạn</h2>
     <div class="in">
-      <label class="sr-only" for="code">Mã đơn</label>
+      <label class="field-label" for="code">Mã đơn</label>
       <input id="code" list="codes" autocomplete="off" placeholder="Nhập mã đơn, ví dụ FD001" maxlength="5">
       <datalist id="codes"></datalist>
       <p class="hint">Mã đơn có dạng FD + 3 chữ số, xem trong lịch sử đơn hàng của bạn.</p>
@@ -173,14 +188,14 @@ footer p{margin:0 0 3px}
     <div class="in">
       <p class="about-order" id="about-order">Chưa có đơn. Nhập mã đơn ở cột bên trái.</p>
       <div class="issues" aria-label="Chọn nhanh vấn đề">
-        <button type="button" data-issue="Đơn giao trễ, tôi muốn biết cách xử lý.">Giao chậm</button>
-        <button type="button" data-issue="Đơn bị giao thiếu món: ">Thiếu món</button>
-        <button type="button" data-issue="Đơn bị giao sai món: ">Sai món</button>
-        <button type="button" data-issue="Tôi chưa nhận được đơn.">Chưa nhận được</button>
-        <button type="button" data-issue="Tôi muốn hủy đơn.">Muốn hủy</button>
-        <button type="button" data-issue="Tôi bị trừ tiền nhưng chưa rõ, cần kiểm tra thanh toán.">Bị trừ tiền</button>
+        <button type="button" aria-pressed="false" data-issue="Đơn giao trễ, tôi muốn biết cách xử lý.">Giao chậm</button>
+        <button type="button" aria-pressed="false" data-issue="Đơn bị giao thiếu món: ">Thiếu món</button>
+        <button type="button" aria-pressed="false" data-issue="Đơn bị giao sai món: ">Sai món</button>
+        <button type="button" aria-pressed="false" data-issue="Tôi chưa nhận được đơn.">Chưa nhận được</button>
+        <button type="button" aria-pressed="false" data-issue="Tôi muốn hủy đơn.">Muốn hủy</button>
+        <button type="button" aria-pressed="false" data-issue="Tôi bị trừ tiền nhưng chưa rõ, cần kiểm tra thanh toán.">Bị trừ tiền</button>
       </div>
-      <label class="sr-only" for="message">Mô tả sự cố</label>
+      <label class="field-label" for="message">Mô tả sự cố</label>
       <textarea id="message" maxlength="1800" placeholder="Kể ngắn gọn sự cố. Ví dụ: Giao thiếu 1 phần cơm gà, tôi có chụp ảnh."></textarea>
       <p class="hint">Thiếu hoặc sai món có nhiều phần thì ghi rõ số lượng, ví dụ “thiếu 1 phần I01”. Đừng gửi số điện thoại, địa chỉ, mật khẩu hay OTP.</p>
       <button id="send" class="send" disabled>Gửi yêu cầu hỗ trợ</button>
@@ -191,11 +206,13 @@ footer p{margin:0 0 3px}
   <!-- Cột 3 -->
   <section class="card answer-card" id="answer-card" aria-labelledby="s3">
     <h2 id="s3"><span class="step">3</span>Phản hồi hỗ trợ</h2>
-    <div class="in answer" id="answer" aria-live="polite" tabindex="-1">
+    <div class="in"><p class="loading-status" id="loading-status" role="status" hidden>Đang kiểm tra đơn và chính sách. Vui lòng đợi phản hồi…</p>
+    <div class="answer" id="answer" aria-live="polite" tabindex="-1">
+      <svg class="empty-art" viewBox="0 0 48 48" fill="none" aria-hidden="true"><rect x="5" y="7" width="38" height="29" rx="7" fill="#e5f1f2"/><path d="M14 17h20M14 24h13M13 35v7l9-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       <div class="waiting"><p style="margin:0">Phản hồi sẽ hiện ở đây sau khi bạn gửi yêu cầu.</p>
         <ol><li>Chọn đơn gặp sự cố</li><li>Kể ngắn gọn chuyện đã xảy ra</li><li>Bấm <b>Gửi yêu cầu hỗ trợ</b></li></ol>
         <p style="margin:10px 0 0">Mọi khoản bồi thường chỉ là đề xuất, nhân viên duyệt trước khi thực hiện.</p></div>
-    </div>
+    </div></div>
   </section>
 
 </form>
@@ -203,7 +220,8 @@ footer p{margin:0 0 3px}
 
 <footer class="wrap">
   <p>Đây là bản thử nghiệm: hệ thống chỉ tạo đề xuất để nhân viên duyệt, không hủy đơn, gửi tin hay hoàn tiền thật.</p>
-  <p>Đơn hàng và chính sách được dựng cho bài lab AI20K (Track D1), không đại diện chính sách của ShopeeFood, Grab hay nền tảng nào.</p>
+  <p>Tên quán, món ăn, đơn hàng và chính sách trong demo là hư cấu, được dựng cho bài lab AI20K (Track D1), không đại diện ShopeeFood, Grab hay nền tảng nào.</p>
+  <p>Ảnh minh họa nhóm món, không phải ảnh xác nhận sự cố. <a href="/assets/food/credits.html" target="_blank" rel="noopener">Nguồn và giấy phép ảnh</a>.</p>
 </footer>
 
 <script>
@@ -226,6 +244,7 @@ function el(tag,text,cls){const e=document.createElement(tag);if(text!=null)e.te
 const findOrder=code=>state.orders.find(o=>o.order_id===code);
 function setMode(kind,title,text){$('demo').className='demo'+(kind?' '+kind:'');$('mode-title').textContent=title;$('mode-text').textContent=text;}
 const narrow=()=>window.matchMedia('(max-width:640px)').matches;
+function foodImage(name){const n=name.toLowerCase().replaceAll('đ','d').normalize('NFD').replace(/[\u0300-\u036f]/g,'');return '/assets/food/'+(/\bcanh\b/.test(n)?'soup.jpg':/\b(com|xoi)\b/.test(n)?'rice.jpg':/\btra\b/.test(n)?'tea.jpg':'dish.svg');}
 
 /* ---------- Cột 1: đơn ---------- */
 function pick(){
@@ -241,23 +260,24 @@ function pick(){
   const wrap=el('div',null,'receipt'),head=el('div',null,'receipt-head');
   head.append(el('strong',o.order_id+' · '+o.restaurant));
   const st=el('span',null,'status');
-  st.append(el('span',statusText[o.status]||o.status,o.status==='cancelled'?'b':o.status==='delivering'?'w':''),document.createTextNode(' · '),
+  st.append(el('span',statusText[o.status]||o.status,'status-badge '+(o.status==='cancelled'?'b':o.status==='delivering'?'w':'')),document.createTextNode(' · '),
     el('span',o.delay_minutes>0?'Trễ '+o.delay_minutes+' phút':'Đúng giờ',o.delay_minutes>30?'w':''),document.createTextNode(' · '),
     el('span',payText[o.payment_status]||o.payment_status,o.payment_status!=='paid'?'w':''));
   head.append(st);
   const t=document.createElement('table');t.className='items';const tb=document.createElement('tbody');
-  o.items.forEach(i=>{const tr=document.createElement('tr'),name=el('td',i.name);name.append(el('span',i.item_id+' · '+money(i.unit_price_vnd)+'/phần','u'));tr.append(el('td',i.quantity+'×','q'),name,el('td',money(i.quantity*i.unit_price_vnd),'r'));tb.append(tr);});
+  o.items.forEach(i=>{const tr=document.createElement('tr'),cell=el('td');cell.colSpan=2;const item=el('div',null,'menu-item'),img=el('img');img.className='food-thumb';img.src=foodImage(i.name);img.alt='';img.width=52;img.height=52;img.loading='lazy';img.decoding='async';img.title='Ảnh minh họa nhóm món';img.addEventListener('error',()=>{img.src='/assets/food/dish.svg';},{once:true});const name=el('div');name.append(el('span',i.name,'item-name'),el('span',i.quantity+'× · '+i.item_id+' · '+money(i.unit_price_vnd)+'/phần','u'));item.append(img,name);cell.append(item);tr.append(cell,el('td',money(i.quantity*i.unit_price_vnd),'r'));tb.append(tr);});
   const tf=document.createElement('tfoot');
   const line=(k,v)=>{const tr=document.createElement('tr'),td=el('td',k);td.colSpan=2;tr.append(td,el('td',money(v),'r'));tf.append(tr);};
   line('Tiền món',o.subtotal_vnd);if(o.delivery_fee_vnd)line('Phí giao',o.delivery_fee_vnd);line('Tổng',o.subtotal_vnd+(o.delivery_fee_vnd||0));
   t.append(tb,tf);
   const extra=el('p',(o.evidence.length?'Đã có ảnh đính kèm trong hồ sơ đơn.':'Chưa có ảnh đính kèm.')+(o.compensated?' Đơn này đã được bồi thường trước đó.':''),'status');extra.style.margin='8px 0 0';
-  wrap.append(head,t,extra);box.replaceChildren(wrap);
+  wrap.append(head,t,el('p','Ảnh minh họa nhóm món','image-note'),extra);box.replaceChildren(wrap);
 }
 $('code').addEventListener('input',pick);
 
 /* ---------- Cột 2: sự cố ---------- */
-document.querySelectorAll('[data-issue]').forEach(b=>b.addEventListener('click',()=>{const m=$('message');m.value=b.dataset.issue;m.focus();m.setSelectionRange(m.value.length,m.value.length);}));
+document.querySelectorAll('[data-issue]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-issue]').forEach(other=>other.setAttribute('aria-pressed',String(other===b)));const m=$('message');m.value=b.dataset.issue;m.focus();m.setSelectionRange(m.value.length,m.value.length);}));
+$('message').addEventListener('input',()=>document.querySelectorAll('[data-issue]').forEach(b=>b.setAttribute('aria-pressed','false')));
 $('message').addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey))$('form').requestSubmit();});
 
 /* ---------- Kịch bản demo ---------- */
@@ -271,14 +291,14 @@ $('form').addEventListener('submit',async ev=>{
   const code=$('code').value.trim().toUpperCase(),msg=$('message').value.trim();
   $('error').textContent='';
   if(!msg){$('error').textContent='Bạn hãy kể ngắn gọn sự cố ở bước 2.';$('message').focus();return;}
-  $('send').disabled=true;$('send').textContent='Đang kiểm tra…';$('answer').classList.add('busy');
+  $('send').disabled=true;$('send').textContent='Đang kiểm tra…';$('answer').classList.add('busy');$('answer').setAttribute('aria-busy','true');$('loading-status').hidden=false;
   try{
     const res=await fetch('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:(code?code+' ':'')+msg})});
     let payload;try{payload=await res.json();}catch(_){throw new Error('Hệ thống trả về dữ liệu không đọc được (mã '+res.status+'). Vui lòng thử lại.');}
     if(!res.ok)throw new Error(payload.error||'Chưa xử lý được yêu cầu. Vui lòng thử lại.');
     renderAnswer(payload.result);renderTech(payload);
   }catch(e){$('error').textContent=e.message;}
-  finally{$('send').disabled=false;$('send').textContent='Gửi yêu cầu hỗ trợ';$('answer').classList.remove('busy');}
+  finally{$('send').disabled=false;$('send').textContent='Gửi yêu cầu hỗ trợ';$('answer').classList.remove('busy');$('answer').setAttribute('aria-busy','false');$('loading-status').hidden=true;}
 });
 
 /* ---------- Cột 3: phản hồi ---------- */

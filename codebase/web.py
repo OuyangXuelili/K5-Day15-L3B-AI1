@@ -7,9 +7,14 @@ from pathlib import Path
 from urllib.parse import urlparse
 from ai import MODEL_PROVIDER
 from agent import answer
+from demo_catalog import display_order, resolve_demo_item_names
 import tracing
 
 ROOT = Path(__file__).resolve().parents[1]
+ASSETS = {"/assets/food/" + name: (ROOT / "codebase/assets/food" / name, content_type)
+          for name, content_type in (("rice.jpg", "image/jpeg"), ("soup.jpg", "image/jpeg"),
+                                     ("tea.jpg", "image/jpeg"), ("dish.svg", "image/svg+xml"),
+                                     ("credits.html", "text/html; charset=utf-8"))}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -25,13 +30,17 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_GET(self):
-        if self.path == "/":
+        path = urlparse(self.path).path
+        if path in ASSETS:
+            asset, content_type = ASSETS[path]
+            self.reply(200, asset.read_bytes(), content_type)
+        elif self.path == "/":
             self.reply(200, (ROOT / "codebase/index.html").read_bytes(), "text/html; charset=utf-8")
         elif self.path == "/api/bootstrap":
             orders = json.loads((ROOT / "data/orders.json").read_text(encoding="utf-8"))["orders"]
             policies = json.loads((ROOT / "data/policies.json").read_text(encoding="utf-8"))["policies"]
             count = json.loads((ROOT / "evidence/review-sources.json").read_text(encoding="utf-8"))["count"]
-            self.reply(200, {"mode": "preview" if MODEL_PROVIDER == "fake" else "ai", "orders": orders,
+            self.reply(200, {"mode": "preview" if MODEL_PROVIDER == "fake" else "ai", "orders": [display_order(order) for order in orders],
                              "policies": policies, "review_count": count})
         else:
             self.reply(404, {"error": "Không có đường dẫn này"})
@@ -50,11 +59,13 @@ class Handler(BaseHTTPRequestHandler):
                 self.reply(413, {"error": "Nội dung quá lớn hoặc rỗng"})
                 return
             data = json.loads(self.rfile.read(length))
-            if not isinstance(data, dict) or not isinstance(data.get("text"), str):
+            if (not isinstance(data, dict) or not isinstance(data.get("text"), str)
+                    or not data["text"].strip() or len(data["text"]) > 2000):
                 raise ValueError("Nhập câu khiếu nại hợp lệ")
             tracing.begin("web-demo")
             try:
-                result = json.loads(answer(data["text"])["output"])
+                orders = json.loads((ROOT / "data/orders.json").read_text(encoding="utf-8"))["orders"]
+                result = json.loads(answer(resolve_demo_item_names(data["text"], orders))["output"])
             finally:
                 summary, _ = tracing.end()
             self.reply(200, {"result": result, "usage": {"model_calls": summary["model_calls"],

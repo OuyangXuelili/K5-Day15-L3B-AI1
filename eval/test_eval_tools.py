@@ -63,9 +63,20 @@ class DiagnoseTests(unittest.TestCase):
     def row_of(self, out, cid):
         return next(l for l in out.splitlines() if l.startswith("| %s |" % cid))
 
-    def test_baseline_runs(self):
-        r = self.diag(*make_run(self.tmp))
-        self.assertEqual(r.returncode, 0, r.stderr); self.assertIn("Đạt 17/30", r.stdout)
+    def test_reports_known_pass_count(self):
+        csv_path, trace = make_run(self.tmp)
+        rows = list(csv.DictReader(csv_path.read_text(encoding="utf-8").splitlines()))
+        # Kiểm phép đếm trên output kiểm soát được, không gắn vào điểm preview đang thay đổi.
+        for index, row in enumerate(rows):
+            expected = json.loads(row["expected"])
+            output = {**expected, "citations": [expected["policy_id"]] +
+                      ([expected["order_id"]] if expected.get("order_id") else [])} if index == 0 else {}
+            row["output"] = json.dumps(output, ensure_ascii=False)
+        with csv_path.open("w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(f, fieldnames=list(rows[0]))
+            writer.writeheader(); writer.writerows(rows)
+        r = self.diag(csv_path, trace)
+        self.assertEqual(r.returncode, 0, r.stderr); self.assertIn("Đạt 1/30", r.stdout)
 
     def test_invented_source_is_counted_even_with_high_pass_rate(self):
         csv_path, trace = make_run(self.tmp)

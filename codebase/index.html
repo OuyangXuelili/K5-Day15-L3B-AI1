@@ -61,15 +61,6 @@ main{padding-top:18px;padding-bottom:20px}
 /* Cột 1: đơn */
 #code{width:100%;padding:8px 11px;border:1px solid #c3c9cf;border-radius:4px}
 #code:not(:placeholder-shown){text-transform:uppercase}
-.label{font-size:13px;color:var(--muted);margin:12px 0 4px}
-.recent{margin:0;padding:0;list-style:none;border:1px solid var(--line2);border-radius:4px}
-.recent li+li{border-top:1px solid var(--line2)}
-.recent button{display:block;width:100%;border:0;background:none;padding:8px 12px;text-align:left}
-.recent button:hover{background:#f6f8f9}
-.recent button[aria-pressed=true]{background:var(--accent-soft);box-shadow:inset 3px 0 0 var(--accent)}
-.recent .row1{display:flex;justify-content:space-between;gap:8px}
-.recent small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.recent .st{font-size:12.5px;color:var(--muted)}
 .receipt{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
 .receipt-head strong{font-weight:600;display:block}
 .status{font-size:13.5px;color:var(--muted)}
@@ -171,8 +162,7 @@ footer p{margin:0 0 3px}
       <label class="sr-only" for="code">Mã đơn</label>
       <input id="code" list="codes" autocomplete="off" placeholder="Nhập mã đơn, ví dụ FD001" maxlength="5">
       <datalist id="codes"></datalist>
-      <p class="label">Đơn gần đây</p>
-      <ul class="recent" id="recent"></ul>
+      <p class="hint">Mã đơn có dạng FD + 3 chữ số, xem trong lịch sử đơn hàng của bạn.</p>
       <div id="receipt"></div>
     </div>
   </section>
@@ -181,7 +171,7 @@ footer p{margin:0 0 3px}
   <section class="card" aria-labelledby="s2">
     <h2 id="s2"><span class="step">2</span>Chuyện gì đã xảy ra?</h2>
     <div class="in">
-      <p class="about-order" id="about-order">Chưa chọn đơn. Chọn ở cột bên trái hoặc nhập mã đơn.</p>
+      <p class="about-order" id="about-order">Chưa có đơn. Nhập mã đơn ở cột bên trái.</p>
       <div class="issues" aria-label="Chọn nhanh vấn đề">
         <button type="button" data-issue="Đơn giao trễ, tôi muốn biết cách xử lý.">Giao chậm</button>
         <button type="button" data-issue="Đơn bị giao thiếu món: ">Thiếu món</button>
@@ -219,7 +209,6 @@ footer p{margin:0 0 3px}
 <script>
 const $=id=>document.getElementById(id);
 let state,current=null;
-const RECENT=['FD001','FD007','FD061','FD005'];
 const money=v=>new Intl.NumberFormat('vi-VN',{style:'currency',currency:'VND'}).format(v);
 const statusText={delivered:'Đã giao',delivering:'Đang giao',cancelled:'Đã hủy'};
 const payText={paid:'Đã thanh toán',unpaid:'Chưa thanh toán',failed:'Thanh toán lỗi',refund_pending:'Đang chờ hoàn tiền'};
@@ -239,19 +228,11 @@ function setMode(kind,title,text){$('demo').className='demo'+(kind?' '+kind:'');
 const narrow=()=>window.matchMedia('(max-width:640px)').matches;
 
 /* ---------- Cột 1: đơn ---------- */
-function renderRecent(){
-  $('recent').replaceChildren(...RECENT.map(findOrder).filter(Boolean).map(o=>{
-    const li=document.createElement('li'),b=document.createElement('button');b.type='button';
-    b.setAttribute('aria-pressed',String(!!current&&current.order_id===o.order_id));
-    const r1=el('span',null,'row1');r1.append(el('b',o.order_id),el('span',statusText[o.status]||o.status,'st'));
-    b.append(r1,el('small',o.restaurant+' · '+o.items.map(i=>i.name).join(', ')));
-    b.addEventListener('click',()=>{$('code').value=o.order_id;pick();$('message').focus();});li.append(b);return li;}));
-}
 function pick(){
   const code=$('code').value.trim().toUpperCase();
-  current=findOrder(code)||null;renderRecent();
+  current=findOrder(code)||null;
   const box=$('receipt'),about=$('about-order');
-  if(!code){box.replaceChildren();about.textContent='Chưa chọn đơn. Chọn ở cột bên trái hoặc nhập mã đơn.';return;}
+  if(!code){box.replaceChildren();about.textContent='Chưa có đơn. Nhập mã đơn ở cột bên trái.';return;}
   if(!current){
     box.replaceChildren(el('p','Không tìm thấy đơn '+code+' trong tài khoản của bạn. Bạn vẫn có thể gửi yêu cầu, hệ thống sẽ hỏi lại mã đơn.','notfound'));
     about.textContent='Mã '+code+' chưa khớp đơn nào.';return;}
@@ -334,7 +315,7 @@ fetch('/api/bootstrap').then(r=>{if(!r.ok)throw new Error('Không tải được
   else setMode('','Bản demo · Chế độ AI','chưa kiểm kết nối; chỉ báo “AI thật” sau lần gọi đầu tiên có token.');
   $('codes').replaceChildren(...data.orders.map(o=>{const op=document.createElement('option');op.value=o.order_id;op.label=o.restaurant;return op;}));
   $('stats').textContent=data.review_count+' review công khai làm bằng chứng · '+data.orders.length+' đơn giả lập · '+data.policies.length+' quy tắc thử nghiệm · nhập được mọi mã trong dữ liệu';
-  renderRecent();$('send').disabled=false;
+  $('send').disabled=false;
 }).catch(()=>{setMode('err','Bản demo · Lỗi','không tải được dữ liệu. Kiểm terminal đang chạy python run.py.');});
 </script>
 </body></html>
